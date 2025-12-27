@@ -616,18 +616,28 @@ function generateOverlayURL() {
   // Daten in URL codieren
   const encodedData = encodeURIComponent(JSON.stringify(gamesData));
   
-  // GitHub Pages URL oder lokale URL
+  // GitHub Pages URL FEST EINTRAGEN (ÄNDERE DIESEN TEIL!)
+  // Ersetze 'DEIN-REPO-NAME' mit deinem tatsächlichen Repository-Namen
+  const GITHUB_USERNAME = 'xrewins';
+  const REPO_NAME = 'winchallangeoverlay'; // Dein Repository-Name
+  
+  // GitHub Pages URL
+  const githubPagesUrl = `https://${GITHUB_USERNAME}.github.io/${REPO_NAME}`;
+  
+  // Prüfen ob wir lokal oder auf GitHub sind
   let baseUrl;
   if (window.location.href.includes('github.io')) {
-    // Auf GitHub Pages
-    baseUrl = window.location.origin;
+    // Sind schon auf GitHub Pages
+    baseUrl = window.location.origin + '/';
   } else {
-    // Lokal - relative URL verwenden
-    baseUrl = window.location.origin + window.location.pathname;
-    baseUrl = baseUrl.replace('control.html', '');
+    // Lokal entwickeln - GitHub Pages URL verwenden
+    baseUrl = githubPagesUrl + '/';
   }
   
+  // URL zusammensetzen (MIT Slash vor index.html!)
   const overlayUrl = `${baseUrl}index.html?data=${encodedData}&user=${currentUserId}`;
+  
+  console.log('Generierte URL:', overlayUrl);
   
   // URL anzeigen
   document.getElementById('overlay-url').value = overlayUrl;
@@ -803,3 +813,4 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
+
