@@ -2,196 +2,239 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Win Challenge Control</title>
+<title>Win Challenge Overlay</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* Zusätzliche Live-Update Animationen */
+@keyframes highlight-update {
+  0% { background-color: rgba(0, 216, 167, 0.1); }
+  100% { background-color: transparent; }
+}
+
+.updated {
+  animation: highlight-update 1s ease;
+}
+
+.refresh-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+  color: #00D8A7;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.refresh-indicator.visible {
+  opacity: 1;
+}
+</style>
 </head>
-<body class="control">
+<body>
 
-<h1>🎮 Win Challenge Control</h1>
+<div class="overlay-container">
+  <div class="overlay-header">
+    <div class="title-group">
+      <div class="pulse-dot"></div>
+      <span class="overlay-title">WIN CHALLENGE</span>
+      <div class="live-badge" id="status-indicator">
+        <i class="fas fa-circle"></i> LIVE
+      </div>
+    </div>
+    <div class="total-stats">
+      <span class="total-text">GESAMT</span>
+      <span class="total-value" id="total-value">0/0</span>
+    </div>
+  </div>
 
-<!-- Overlay URL Generator -->
-<div class="url-generator">
-  <h3>📡 Overlay für OBS einrichten:</h3>
-  <ol>
-    <li>Ändere unten deine Games</li>
-    <li>Klicke auf "Overlay URL generieren"</li>
-    <li>Kopiere die URL und füge sie in OBS als Browserquelle ein</li>
-  </ol>
-  <button onclick="generateOverlayURL()" class="generate-btn">
-    🔗 Overlay URL generieren
-  </button>
-  <div id="url-output" style="margin-top: 15px;"></div>
+  <div id="games" class="games-list">
+    <!-- Games werden hier eingefügt -->
+  </div>
+
+  <div class="global-progress">
+    <div class="progress-header">
+      <span>Fortschritt</span>
+      <span class="progress-percent" id="total-percent">0%</span>
+      <span class="refresh-indicator" id="refresh-indicator">
+        <i class="fas fa-sync-alt"></i> Aktualisiert
+      </span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="total-fill"></div>
+    </div>
+  </div>
 </div>
 
-<hr style="margin: 20px 0; border-color: rgba(255,255,255,0.1);">
-
-<!-- Game Management -->
-<h3>🎯 Games verwalten:</h3>
-<input id="name" placeholder="Game Name">
-<input id="needed" type="number" placeholder="Wins benötigt">
-<button onclick="addGame()">Game hinzufügen</button>
-
-<div id="list"></div>
-
 <script>
-// GitHub Pages URL - BITTE ANPASSEN!
-const GITHUB_PAGES_URL = "https://xrewins.github.io/winchallangeoverlay/";
+// Daten aus URL laden
+function loadDataFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const dataParam = urlParams.get('data');
+  
+  if (!dataParam) {
+    console.log("Keine Daten in der URL gefunden");
+    return [];
+  }
+  
+  try {
+    const decodedData = decodeURIComponent(dataParam);
+    const games = JSON.parse(decodedData);
+    
+    if (!Array.isArray(games)) {
+      throw new Error("Daten sind kein Array");
+    }
+    
+    return games;
+  } catch (error) {
+    console.error("Fehler beim Laden der Daten:", error);
+    return [];
+  }
+}
 
-// Daten laden und anzeigen
-function load() {
-  const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
-  const list = document.getElementById("list");
-  list.innerHTML = "";
-
-  data.forEach((g, i) => {
-    const done = g.current >= g.needed;
-    list.innerHTML += `
-      <div class="control-card ${done ? 'done' : ''}">
-        <div class="title">${g.name}</div>
-        <div class="progress">${g.current}/${g.needed}</div>
-        <div class="buttons">
-          <button onclick="change(${i},-1)">➖</button>
-          <button onclick="change(${i},1)">➕</button>
-          <button onclick="removeGame(${i})" class="delete-btn">🗑️</button>
+// Overlay rendern mit Highlight-Effekt bei Updates
+function render(highlightUpdates = false) {
+  const gamesData = loadDataFromURL();
+  const gamesDiv = document.getElementById("games");
+  
+  if (gamesData.length === 0) {
+    gamesDiv.innerHTML = `
+      <div class="game-row">
+        <div class="game-content">
+          <div class="game-status">
+            <div class="status-icon">
+              <i class="fas fa-cloud-download-alt"></i>
+            </div>
+            <span class="game-name">Warte auf Daten...</span>
+          </div>
+          <div class="game-progress">
+            <div class="mini-bar-container">
+              <div class="mini-bar" style="width: 0%"></div>
+            </div>
+            <span class="game-count">-/-</span>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.getElementById("total-value").textContent = "0/0";
+    document.getElementById("total-percent").textContent = "0%";
+    document.getElementById("total-fill").style.width = "0%";
+    return;
+  }
+  
+  let html = '';
+  let totalCurrent = 0;
+  let totalNeeded = 0;
+  let completedGames = 0;
+  
+  gamesData.forEach((game, index) => {
+    const percent = game.needed > 0 ? Math.min(100, (game.current / game.needed) * 100) : 0;
+    const done = game.current >= game.needed;
+    
+    totalCurrent += game.current;
+    totalNeeded += game.needed;
+    if (done) completedGames++;
+    
+    html += `
+      <div class="game-row ${done ? 'completed' : ''} ${highlightUpdates ? 'updated' : ''}">
+        <div class="game-content">
+          <div class="game-status">
+            <div class="status-icon">
+              ${done ? '<i class="fas fa-check"></i>' : '<div class="in-progress"></div>'}
+            </div>
+            <span class="game-name">${game.name}</span>
+          </div>
+          <div class="game-progress">
+            <div class="mini-bar-container">
+              <div class="mini-bar" style="width: ${percent}%"></div>
+            </div>
+            <span class="game-count">${game.current}<span class="count-divider">/</span>${game.needed}</span>
+          </div>
         </div>
       </div>
     `;
   });
+  
+  gamesDiv.innerHTML = html;
+  
+  const totalPercent = totalNeeded > 0 ? Math.min(100, (totalCurrent / totalNeeded) * 100) : 0;
+  
+  document.getElementById("total-value").textContent = `${completedGames}/${gamesData.length}`;
+  document.getElementById("total-percent").textContent = `${Math.round(totalPercent)}%`;
+  document.getElementById("total-fill").style.width = `${totalPercent}%`;
+  
+  // Update-Indicator anzeigen
+  if (highlightUpdates) {
+    const indicator = document.getElementById('refresh-indicator');
+    indicator.classList.add('visible');
+    setTimeout(() => indicator.classList.remove('visible'), 1500);
+  }
 }
 
-// Game hinzufügen
-function addGame() {
-  const nameInput = document.getElementById("name");
-  const neededInput = document.getElementById("needed");
+// Polling für Live-Updates
+let lastDataHash = '';
+let updateInterval = 5000; // Anfangs alle 5 Sekunden
+let errorCount = 0;
+
+function checkForUpdates() {
+  const currentHash = window.location.search;
   
-  if (!nameInput.value.trim() || !neededInput.value) {
-    alert("Bitte Game-Name und benötigte Wins eingeben!");
-    return;
+  if (currentHash !== lastDataHash) {
+    console.log("Neue Daten erkannt, aktualisiere...");
+    lastDataHash = currentHash;
+    render(true); // Mit Highlight-Effekt
+    
+    // Bei Erfolg: Intervall verkürzen für schnellere Updates
+    if (updateInterval > 1000) {
+      updateInterval = 1000; // Auf 1 Sekunde setzen
+      clearInterval(updateTimer);
+      startPolling();
+    }
+    
+    errorCount = 0;
+    return true;
   }
   
-  const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
-  data.push({
-    name: nameInput.value.trim(),
-    needed: Number(neededInput.value),
-    current: 0
+  return false;
+}
+
+function startPolling() {
+  updateTimer = setInterval(() => {
+    if (!checkForUpdates()) {
+      // Bei fehlenden Updates: Intervall langsam erhöhen
+      errorCount++;
+      if (errorCount > 10 && updateInterval < 5000) {
+        updateInterval = Math.min(updateInterval * 1.5, 5000);
+        clearInterval(updateTimer);
+        startPolling();
+        console.log(`Update-Intervall angepasst: ${updateInterval}ms`);
+      }
+    }
+  }, updateInterval);
+}
+
+// Initiale Ausführung
+function init() {
+  console.log("Win Challenge Overlay gestartet");
+  console.log("URL Parameter:", window.location.search);
+  
+  // Erste Renderung
+  render();
+  lastDataHash = window.location.search;
+  
+  // Polling starten
+  startPolling();
+  
+  // Auch auf Hash-Änderungen reagieren (falls URL sich ändert)
+  window.addEventListener('hashchange', () => {
+    console.log("Hash geändert, aktualisiere...");
+    render(true);
   });
-  
-  localStorage.setItem("winChallenge", JSON.stringify(data));
-  
-  // Felder leeren
-  nameInput.value = "";
-  neededInput.value = "";
-  nameInput.focus();
-  
-  load();
-  updateURLIfVisible();
 }
 
-// Wins ändern
-function change(i, v) {
-  const data = JSON.parse(localStorage.getItem("winChallenge"));
-  if (!data[i]) return;
-  
-  data[i].current = Math.max(0, data[i].current + v);
-  localStorage.setItem("winChallenge", JSON.stringify(data));
-  load();
-  updateURLIfVisible();
-}
-
-// Game entfernen
-function removeGame(i) {
-  if (!confirm("Game wirklich löschen?")) return;
-  
-  const data = JSON.parse(localStorage.getItem("winChallenge"));
-  data.splice(i, 1);
-  localStorage.setItem("winChallenge", JSON.stringify(data));
-  load();
-  updateURLIfVisible();
-}
-
-// Overlay URL generieren
-function generateOverlayURL() {
-  const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
-  
-  if (data.length === 0) {
-    alert("⚠️ Füge zuerst Games hinzu!");
-    return;
-  }
-  
-  // JSON in URL-safe String umwandeln
-  const jsonString = JSON.stringify(data);
-  const encodedData = encodeURIComponent(jsonString);
-  
-  // URL zusammensetzen
-  const overlayUrl = GITHUB_PAGES_URL + "?data=" + encodedData;
-  
-  // URL anzeigen
-  const urlOutput = document.getElementById("url-output");
-  urlOutput.innerHTML = `
-    <div style="background: #1a1a1a; padding: 15px; border-radius: 10px; margin: 10px 0;">
-      <p><strong>📋 Diese URL in OBS einfügen:</strong></p>
-      <input type="text" value="${overlayUrl}" 
-             style="width: 100%; padding: 10px; margin: 10px 0; background: #2a2a2a; color: white; border: 1px solid #444; border-radius: 5px;" 
-             readonly id="url-input">
-      <button onclick="copyURL()" style="padding: 8px 15px; background: #00ff9c; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
-        📋 URL kopieren
-      </button>
-      <button onclick="testOverlay()" style="padding: 8px 15px; background: #0099ff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 10px;">
-        🔍 In neuem Tab testen
-      </button>
-    </div>
-  `;
-  
-  console.log("Overlay URL generiert:", overlayUrl);
-  console.log("Daten:", data);
-}
-
-// URL kopieren
-function copyURL() {
-  const urlInput = document.getElementById("url-input");
-  if (!urlInput) return;
-  
-  urlInput.select();
-  urlInput.setSelectionRange(0, 99999); // Für Mobile
-  
-  try {
-    navigator.clipboard.writeText(urlInput.value).then(() => {
-      alert("✅ URL kopiert! Füge sie in OBS als Browserquelle ein.");
-    });
-  } catch (err) {
-    // Fallback für ältere Browser
-    document.execCommand("copy");
-    alert("✅ URL kopiert! Füge sie in OBS als Browserquelle ein.");
-  }
-}
-
-// Overlay testen
-function testOverlay() {
-  const urlInput = document.getElementById("url-input");
-  if (!urlInput) return;
-  
-  window.open(urlInput.value, '_blank');
-}
-
-// URL automatisch aktualisieren wenn sie sichtbar ist
-function updateURLIfVisible() {
-  const urlInput = document.getElementById("url-input");
-  if (urlInput) {
-    // URL neu generieren wenn bereits eine angezeigt wird
-    generateOverlayURL();
-  }
-}
-
-// Initial laden
-load();
-
-// Tastatur-Shortcuts
-document.addEventListener('keydown', function(e) {
-  // Enter im Name-Feld fügt Game hinzu
-  if (e.target.id === 'name' && e.key === 'Enter') {
-    addGame();
-  }
-});
+// Starte die Anwendung
+init();
 </script>
 
 </body>
