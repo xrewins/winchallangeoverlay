@@ -7,75 +7,192 @@
 </head>
 <body class="control">
 
-<div class="panel">
-  <h1>🎮 Win Challenge</h1>
+<h1>🎮 Win Challenge Control</h1>
 
-  <input id="gameName" placeholder="Game Name">
-  <input id="gameNeeded" type="number" placeholder="Wins benötigt">
-  <button onclick="addGame()">➕ Hinzufügen</button>
-
-  <div id="list"></div>
+<!-- Overlay URL Generator -->
+<div class="url-generator">
+  <h3>📡 Overlay für OBS einrichten:</h3>
+  <ol>
+    <li>Ändere unten deine Games</li>
+    <li>Klicke auf "Overlay URL generieren"</li>
+    <li>Kopiere die URL und füge sie in OBS als Browserquelle ein</li>
+  </ol>
+  <button onclick="generateOverlayURL()" class="generate-btn">
+    🔗 Overlay URL generieren
+  </button>
+  <div id="url-output" style="margin-top: 15px;"></div>
 </div>
 
+<hr style="margin: 20px 0; border-color: rgba(255,255,255,0.1);">
+
+<!-- Game Management -->
+<h3>🎯 Games verwalten:</h3>
+<input id="name" placeholder="Game Name">
+<input id="needed" type="number" placeholder="Wins benötigt">
+<button onclick="addGame()">Game hinzufügen</button>
+
+<div id="list"></div>
+
 <script>
-function getData() {
-  return JSON.parse(localStorage.getItem("winChallenge")) || [];
-}
+// GitHub Pages URL - BITTE ANPASSEN!
+const GITHUB_PAGES_URL = "https://xrewins.github.io/winchallangeoverlay/";
 
-function saveData(data) {
-  localStorage.setItem("winChallenge", JSON.stringify(data));
-}
-
+// Daten laden und anzeigen
 function load() {
-  const data = getData();
+  const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
   const list = document.getElementById("list");
   list.innerHTML = "";
 
   data.forEach((g, i) => {
+    const done = g.current >= g.needed;
     list.innerHTML += `
-      <div class="control-card ${g.current >= g.needed ? 'done' : ''}">
+      <div class="control-card ${done ? 'done' : ''}">
         <div class="title">${g.name}</div>
-        <div class="wins">${g.current} / ${g.needed}</div>
+        <div class="progress">${g.current}/${g.needed}</div>
         <div class="buttons">
-          <button onclick="change(${i},1)">+1</button>
-          <button onclick="change(${i},-1)">-1</button>
-          <button onclick="removeGame(${i})">✖</button>
+          <button onclick="change(${i},-1)">➖</button>
+          <button onclick="change(${i},1)">➕</button>
+          <button onclick="removeGame(${i})" class="delete-btn">🗑️</button>
         </div>
       </div>
     `;
   });
 }
 
+// Game hinzufügen
 function addGame() {
-  const name = document.getElementById("gameName").value.trim();
-  const needed = Number(document.getElementById("gameNeeded").value);
-
-  if (!name || needed <= 0) return alert("Bitte Game & Wins angeben");
-
-  const data = getData();
-  data.push({ name, needed, current: 0 });
-  saveData(data);
-
-  gameName.value = "";
-  gameNeeded.value = "";
+  const nameInput = document.getElementById("name");
+  const neededInput = document.getElementById("needed");
+  
+  if (!nameInput.value.trim() || !neededInput.value) {
+    alert("Bitte Game-Name und benötigte Wins eingeben!");
+    return;
+  }
+  
+  const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
+  data.push({
+    name: nameInput.value.trim(),
+    needed: Number(neededInput.value),
+    current: 0
+  });
+  
+  localStorage.setItem("winChallenge", JSON.stringify(data));
+  
+  // Felder leeren
+  nameInput.value = "";
+  neededInput.value = "";
+  nameInput.focus();
+  
   load();
+  updateURLIfVisible();
 }
 
+// Wins ändern
 function change(i, v) {
-  const data = getData();
+  const data = JSON.parse(localStorage.getItem("winChallenge"));
+  if (!data[i]) return;
+  
   data[i].current = Math.max(0, data[i].current + v);
-  saveData(data);
+  localStorage.setItem("winChallenge", JSON.stringify(data));
   load();
+  updateURLIfVisible();
 }
 
+// Game entfernen
 function removeGame(i) {
-  const data = getData();
+  if (!confirm("Game wirklich löschen?")) return;
+  
+  const data = JSON.parse(localStorage.getItem("winChallenge"));
   data.splice(i, 1);
-  saveData(data);
+  localStorage.setItem("winChallenge", JSON.stringify(data));
   load();
+  updateURLIfVisible();
 }
 
+// Overlay URL generieren
+function generateOverlayURL() {
+  const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
+  
+  if (data.length === 0) {
+    alert("⚠️ Füge zuerst Games hinzu!");
+    return;
+  }
+  
+  // JSON in URL-safe String umwandeln
+  const jsonString = JSON.stringify(data);
+  const encodedData = encodeURIComponent(jsonString);
+  
+  // URL zusammensetzen
+  const overlayUrl = GITHUB_PAGES_URL + "?data=" + encodedData;
+  
+  // URL anzeigen
+  const urlOutput = document.getElementById("url-output");
+  urlOutput.innerHTML = `
+    <div style="background: #1a1a1a; padding: 15px; border-radius: 10px; margin: 10px 0;">
+      <p><strong>📋 Diese URL in OBS einfügen:</strong></p>
+      <input type="text" value="${overlayUrl}" 
+             style="width: 100%; padding: 10px; margin: 10px 0; background: #2a2a2a; color: white; border: 1px solid #444; border-radius: 5px;" 
+             readonly id="url-input">
+      <button onclick="copyURL()" style="padding: 8px 15px; background: #00ff9c; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+        📋 URL kopieren
+      </button>
+      <button onclick="testOverlay()" style="padding: 8px 15px; background: #0099ff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-left: 10px;">
+        🔍 In neuem Tab testen
+      </button>
+    </div>
+  `;
+  
+  console.log("Overlay URL generiert:", overlayUrl);
+  console.log("Daten:", data);
+}
+
+// URL kopieren
+function copyURL() {
+  const urlInput = document.getElementById("url-input");
+  if (!urlInput) return;
+  
+  urlInput.select();
+  urlInput.setSelectionRange(0, 99999); // Für Mobile
+  
+  try {
+    navigator.clipboard.writeText(urlInput.value).then(() => {
+      alert("✅ URL kopiert! Füge sie in OBS als Browserquelle ein.");
+    });
+  } catch (err) {
+    // Fallback für ältere Browser
+    document.execCommand("copy");
+    alert("✅ URL kopiert! Füge sie in OBS als Browserquelle ein.");
+  }
+}
+
+// Overlay testen
+function testOverlay() {
+  const urlInput = document.getElementById("url-input");
+  if (!urlInput) return;
+  
+  window.open(urlInput.value, '_blank');
+}
+
+// URL automatisch aktualisieren wenn sie sichtbar ist
+function updateURLIfVisible() {
+  const urlInput = document.getElementById("url-input");
+  if (urlInput) {
+    // URL neu generieren wenn bereits eine angezeigt wird
+    generateOverlayURL();
+  }
+}
+
+// Initial laden
 load();
+
+// Tastatur-Shortcuts
+document.addEventListener('keydown', function(e) {
+  // Enter im Name-Feld fügt Game hinzu
+  if (e.target.id === 'name' && e.key === 'Enter') {
+    addGame();
+  }
+});
 </script>
+
 </body>
 </html>
