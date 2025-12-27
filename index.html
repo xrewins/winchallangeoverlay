@@ -8,31 +8,29 @@
 </head>
 <body>
 
-<div id="wrapper">
-  <div class="header">
-    <div class="title-container">
-      <i class="fas fa-trophy"></i>
-      <h2>WIN CHALLENGE</h2>
-      <div class="total-badge" id="total-counter">0/0</div>
+<div class="overlay-container">
+  <div class="overlay-header">
+    <div class="title-group">
+      <div class="pulse-dot"></div>
+      <span class="overlay-title">WIN CHALLENGE</span>
+      <div class="live-badge">LIVE</div>
+    </div>
+    <div class="total-stats">
+      <span class="total-text">GESAMT</span>
+      <span class="total-value" id="total-value">0/0</span>
     </div>
   </div>
-  
-  <div id="games"></div>
 
-  <div id="total">
-    <div class="total-info">
-      <span>Gesamtfortschritt</span>
-      <span id="total-percent">0%</span>
+  <div id="games" class="games-list"></div>
+
+  <div class="global-progress">
+    <div class="progress-header">
+      <span>Fortschritt</span>
+      <span class="progress-percent" id="total-percent">0%</span>
     </div>
-    <div id="total-bar">
-      <div id="total-fill"></div>
-      <div class="progress-dots"></div>
+    <div class="progress-track">
+      <div class="progress-fill" id="total-fill"></div>
     </div>
-  </div>
-  
-  <div class="footer">
-    <i class="fas fa-sync-alt spin" id="live-icon"></i>
-    <span>Live-Update aktiv</span>
   </div>
 </div>
 
@@ -53,17 +51,21 @@ function render() {
     const done = g.current >= g.needed;
 
     const row = document.createElement("div");
-    row.className = "row" + (done ? " done" : "");
+    row.className = "game-row" + (done ? " completed" : "");
     row.innerHTML = `
-      <div class="game-info">
-        <span class="game-icon">${done ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-gamepad"></i>'}</span>
-        <span class="game-name">${g.name}</span>
-      </div>
-      <div class="game-progress">
-        <div class="progress-container">
-          <div class="game-progress-bar" style="width: ${percent}%"></div>
+      <div class="game-content">
+        <div class="game-status">
+          <div class="status-icon">
+            ${done ? '<i class="fas fa-check"></i>' : '<div class="in-progress"></div>'}
+          </div>
+          <span class="game-name">${g.name}</span>
         </div>
-        <span class="game-count">${g.current}/${g.needed}</span>
+        <div class="game-progress">
+          <div class="mini-bar-container">
+            <div class="mini-bar" style="width: ${percent}%"></div>
+          </div>
+          <span class="game-count">${g.current}<span class="count-divider">/</span>${g.needed}</span>
+        </div>
       </div>
     `;
     games.appendChild(row);
@@ -75,12 +77,12 @@ function render() {
 
   document.getElementById("total-fill").style.width = totalPercent + "%";
   document.getElementById("total-percent").textContent = Math.round(totalPercent) + "%";
-  document.getElementById("total-counter").textContent = totalCurrent + "/" + totalNeeded;
+  document.getElementById("total-value").textContent = totalCurrent + "/" + totalNeeded;
   
-  // Live-Icon Animation
-  const liveIcon = document.getElementById("live-icon");
-  liveIcon.classList.add("spin");
-  setTimeout(() => liveIcon.classList.remove("spin"), 1000);
+  // Live-Animation
+  const liveBadge = document.querySelector('.live-badge');
+  liveBadge.classList.add('pulse');
+  setTimeout(() => liveBadge.classList.remove('pulse'), 1000);
 }
 
 setInterval(render, 300);
