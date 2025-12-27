@@ -42,10 +42,16 @@ function render() {
 
   let totalCurrent = 0;
   let totalNeeded = 0;
+  let completedGames = 0;
 
   data.forEach(g => {
     totalCurrent += g.current;
     totalNeeded += g.needed;
+    
+    // Zähle abgeschlossene Games
+    if (g.current >= g.needed && g.needed > 0) {
+      completedGames++;
+    }
 
     const percent = g.needed > 0 ? Math.min(100, (g.current / g.needed) * 100) : 0;
     const done = g.current >= g.needed;
@@ -71,13 +77,15 @@ function render() {
     games.appendChild(row);
   });
 
+  // Berechne Gesamtfortschritt
   const totalPercent = totalNeeded > 0
     ? Math.min(100, (totalCurrent / totalNeeded) * 100)
     : 0;
 
+  // Zeige "Abgeschlossen/Gesamt" an (z.B. "1/5")
+  document.getElementById("total-value").textContent = completedGames + "/" + data.length;
   document.getElementById("total-fill").style.width = totalPercent + "%";
   document.getElementById("total-percent").textContent = Math.round(totalPercent) + "%";
-  document.getElementById("total-value").textContent = totalCurrent + "/" + totalNeeded;
   
   // Live-Animation
   const liveBadge = document.querySelector('.live-badge');
