@@ -111,71 +111,7 @@ body {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* Supabase Config Panel */
-.supabase-config {
-  background: rgba(0, 216, 167, 0.1);
-  border: 2px solid rgba(0, 216, 167, 0.3);
-  border-radius: 16px;
-  padding: 25px;
-  margin-bottom: 30px;
-  animation: slideIn 0.5s ease;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.supabase-config h3 {
-  color: var(--primary);
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.config-inputs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.config-inputs input {
-  padding: 14px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  color: white;
-  font-family: 'Monaco', 'Consolas', monospace;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-}
-
-.config-inputs input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(0, 216, 167, 0.2);
-}
-
-.config-inputs input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-#configStatus {
-  margin-top: 15px;
-  padding: 12px;
-  border-radius: 10px;
-  display: none;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Main Layout */
+/* Main Content */
 .main-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -206,76 +142,6 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-/* URL Generator */
-.url-generator {
-  background: linear-gradient(135deg, rgba(0, 216, 167, 0.1) 0%, rgba(0, 255, 194, 0.05) 100%);
-  border-color: rgba(0, 216, 167, 0.3);
-}
-
-#overlay-url {
-  width: 100%;
-  padding: 14px;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  font-family: monospace;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  word-break: break-all;
-  transition: all 0.3s ease;
-}
-
-#overlay-url:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-.url-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  padding: 14px 22px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.95rem;
-}
-
-.btn-primary {
-  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-  color: white;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 216, 167, 0.4);
-}
-
-.btn-secondary {
-  background: var(--bg-input);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-
-.btn-secondary:hover {
-  background: var(--border);
-  transform: translateY(-2px);
-}
-
-.btn-small {
-  padding: 10px 18px;
-  font-size: 0.9rem;
 }
 
 /* Game Form */
@@ -390,6 +256,45 @@ body {
   margin-top: 15px;
 }
 
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 216, 167, 0.4);
+}
+
+.btn-secondary {
+  background: var(--bg-input);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+  transform: translateY(-2px);
+}
+
+.btn-small {
+  padding: 10px 16px;
+  font-size: 0.9rem;
+}
+
 .btn-icon {
   padding: 10px 14px;
   border-radius: 8px;
@@ -480,38 +385,6 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* Instructions */
-.instructions {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
-  padding: 25px;
-  margin-top: 40px;
-  border: 1px solid var(--border);
-}
-
-.instructions h3 {
-  color: var(--primary);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.instructions ol {
-  padding-left: 25px;
-  line-height: 1.8;
-  color: var(--text-muted);
-}
-
-.instructions li {
-  margin-bottom: 12px;
-  padding-left: 10px;
-}
-
-.instructions li strong {
-  color: var(--text);
-}
-
 /* Empty State */
 .empty-state {
   text-align: center;
@@ -523,35 +396,6 @@ body {
   font-size: 3.5rem;
   margin-bottom: 20px;
   opacity: 0.5;
-}
-
-/* Sync Notification */
-.sync-notification {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: rgba(0, 216, 167, 0.95);
-  color: white;
-  padding: 15px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  z-index: 1001;
-  box-shadow: 0 6px 25px rgba(0, 216, 167, 0.3);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  animation: slideUp 0.3s ease, slideDown 0.3s ease 2.7s;
-  transform-origin: bottom right;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(100px) scale(0.8); opacity: 0; }
-  to { transform: translateY(0) scale(1); opacity: 1; }
-}
-
-@keyframes slideDown {
-  from { transform: translateY(0) scale(1); opacity: 1; }
-  to { transform: translateY(100px) scale(0.8); opacity: 0; }
 }
 
 /* Scrollbar */
@@ -579,7 +423,7 @@ body {
 <!-- Connection Status -->
 <div id="connectionStatus" class="connection-status status-disconnected">
   <div class="sync-animation"></div>
-  <span>Verbindung wird hergestellt...</span>
+  <span>Bitte mit Cloud verbinden</span>
 </div>
 
 <div class="container">
@@ -587,25 +431,6 @@ body {
   <div class="header">
     <h1><i class="fas fa-trophy"></i> Win Challenge Control</h1>
     <p class="header-subtitle">Echtzeit-Game-Tracking für deinen Stream</p>
-  </div>
-
-  <!-- Supabase Configuration -->
-  <div class="supabase-config">
-    <h3><i class="fas fa-cloud"></i> Cloud-Verbindung</h3>
-    <p style="color: rgba(255,255,255,0.7); margin: 10px 0 15px 0; font-size: 0.95rem; line-height: 1.6;">
-      <i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i>
-      Für Echtzeit-Updates zwischen Control und Overlay. Daten werden sicher in der Cloud gespeichert.
-    </p>
-    
-    <div class="config-inputs">
-      <input type="text" id="supabaseUrl" placeholder="Supabase Project URL" value="https://ghzodgqipchpgwljdumn.supabase.co">
-      <input type="text" id="supabaseKey" placeholder="Supabase anon/public key" value="sb_publishable_WdoRvQS8nS2RTOFGvVcY8w_EukbvYTq">
-      <button onclick="saveSupabaseConfig()" class="btn btn-primary" style="grid-column: span 2;">
-        <i class="fas fa-plug"></i> Mit Cloud verbinden
-      </button>
-    </div>
-    
-    <div id="configStatus" style="margin-top: 15px; padding: 12px; border-radius: 10px; display: none;"></div>
   </div>
 
   <!-- Main Content -->
@@ -636,37 +461,54 @@ body {
       </div>
     </div>
 
-    <!-- Right Panel: Overlay Control -->
-    <div class="panel url-generator">
-      <h2 class="panel-title"><i class="fas fa-satellite-dish"></i> Overlay für OBS</h2>
+    <!-- Right Panel: Cloud & Overlay -->
+    <div class="panel">
+      <h2 class="panel-title"><i class="fas fa-cloud"></i> Cloud & Overlay</h2>
       
+      <!-- Cloud Connection -->
       <div class="form-group">
-        <label>Overlay URL (in OBS als Browserquelle einfügen)</label>
-        <input type="text" id="overlay-url" class="form-input" readonly 
-               value="Bitte zuerst mit der Cloud verbinden">
-      </div>
-      
-      <div class="url-actions">
-        <button onclick="generateOverlayURL()" class="btn btn-primary">
-          <i class="fas fa-link"></i> Overlay-URL erstellen
-        </button>
-        <button onclick="copyURL()" class="btn btn-secondary" id="copyBtn">
-          <i class="far fa-copy"></i> Kopieren
-        </button>
-        <button onclick="testOverlay()" class="btn btn-secondary">
-          <i class="fas fa-external-link-alt"></i> Vorschau
-        </button>
+        <label>Cloud-Verbindung</label>
+        <div style="display: grid; gap: 12px;">
+          <button onclick="connectToCloud()" class="btn btn-primary" id="connectBtn">
+            <i class="fas fa-plug"></i> Mit Supabase Cloud verbinden
+          </button>
+          <div id="cloudStatus" style="padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.05); display: none;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div id="cloudStatusIcon" style="width: 12px; height: 12px; border-radius: 50%;"></div>
+              <span id="cloudStatusText">Status wird überprüft...</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Live Update Info -->
+      <!-- Overlay URL -->
+      <div class="form-group">
+        <label>Overlay URL für OBS</label>
+        <input type="text" id="overlay-url" class="form-input" readonly 
+               value="Bitte zuerst mit Cloud verbinden">
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button onclick="generateOverlayURL()" class="btn btn-primary btn-small" id="generateBtn" disabled>
+            <i class="fas fa-link"></i> URL generieren
+          </button>
+          <button onclick="copyURL()" class="btn btn-secondary btn-small" id="copyBtn" disabled>
+            <i class="far fa-copy"></i> Kopieren
+          </button>
+          <button onclick="testOverlay()" class="btn btn-secondary btn-small" id="testBtn" disabled>
+            <i class="fas fa-external-link-alt"></i> Testen
+          </button>
+        </div>
+      </div>
+
+      <!-- Instructions -->
       <div style="margin-top: 25px; padding: 18px; background: rgba(0,216,167,0.1); border-radius: 12px; border-left: 4px solid var(--primary);">
         <h4 style="color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
-          <i class="fas fa-bolt"></i> Echtzeit-Funktionen aktiv
+          <i class="fas fa-info-circle"></i> So funktioniert's:
         </h4>
         <div style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
-          <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Alle Änderungen werden sofort ins Overlay übertragen</p>
-          <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Kein manuelles Aktualisieren notwendig</p>
-          <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Funktioniert auch bei Stream-Unterbrechungen</p>
+          <p>1. <strong>Mit Cloud verbinden</strong> (oben)</p>
+          <p>2. <strong>Games hinzufügen</strong> (links)</p>
+          <p>3. <strong>Overlay-URL generieren</strong> und in OBS einfügen</p>
+          <p style="margin-top: 10px; color: var(--primary);"><i class="fas fa-bolt"></i> Alle Änderungen werden live ins Overlay übertragen!</p>
         </div>
       </div>
     </div>
@@ -691,55 +533,37 @@ body {
       <div class="stat-label">Gesamtfortschritt</div>
     </div>
   </div>
-
-  <!-- Instructions -->
-  <div class="instructions">
-    <h3><i class="fas fa-rocket"></i> In 3 Schritten starten:</h3>
-    <ol>
-      <li><strong>Mit Cloud verbinden:</strong> Klicke auf "Mit Cloud verbinden" (Supabase-Daten sind bereits eingetragen)</li>
-      <li><strong>Games hinzufügen:</strong> Füge deine Games mit Namen und benötigten Wins hinzu</li>
-      <li><strong>Overlay einrichten:</strong> Klicke auf "Overlay-URL erstellen", kopiere die URL und füge sie in OBS als Browserquelle ein</li>
-    </ol>
-    <p style="margin-top: 20px; padding: 15px; background: rgba(0,216,167,0.1); border-radius: 10px; color: var(--text);">
-      <i class="fas fa-lightbulb" style="color: var(--primary); margin-right: 10px;"></i>
-      <strong>Tipp:</strong> Alle Änderungen werden automatisch live ins Overlay übertragen - kein manuelles Aktualisieren mehr nötig!
-    </p>
-  </div>
 </div>
 
 <!-- Include Supabase JS Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-// ==================== SUPABASE KONFIGURATION ====================
-const DEFAULT_SUPABASE_URL = 'https://ghzodgqipchpgwljdumn.supabase.co';
-const DEFAULT_SUPABASE_KEY = 'sb_publishable_WdoRvQS8nS2RTOFGvVcY8w_EukbvYTq';
+// ==================== KONFIGURATION ====================
+const SUPABASE_URL = 'https://ghzodgqipchpgwljdumn.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdoem9kZ3FpcGNocGd3bGpkdW1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY4MTc5MjcsImV4cCI6MjA4MjM5MzkyN30.BYMdLzHYCr_JBYKn6wKSIXpKt7Tn9l_XOhxukR1_UQA';
 
 // ==================== GLOBALE VARIABLEN ====================
 let supabase = null;
-let supabaseUrl = localStorage.getItem('supabaseUrl') || DEFAULT_SUPABASE_URL;
-let supabaseKey = localStorage.getItem('supabaseKey') || DEFAULT_SUPABASE_KEY;
-const USER_ID = 'streamer_' + Math.random().toString(36).substr(2, 9);
 let gamesData = [];
-let currentOverlayURL = '';
-let realtimeChannel = null;
+let currentUser = null;
+let isCloudConnected = false;
 
 // ==================== DOM ELEMENTE ====================
 const connectionStatus = document.getElementById('connectionStatus');
-const supabaseUrlInput = document.getElementById('supabaseUrl');
-const supabaseKeyInput = document.getElementById('supabaseKey');
-const configStatus = document.getElementById('configStatus');
+const cloudStatus = document.getElementById('cloudStatus');
+const cloudStatusIcon = document.getElementById('cloudStatusIcon');
+const cloudStatusText = document.getElementById('cloudStatusText');
 const gamesListEl = document.getElementById('gamesList');
 const overlayUrlInput = document.getElementById('overlay-url');
+const connectBtn = document.getElementById('connectBtn');
+const generateBtn = document.getElementById('generateBtn');
 const copyBtn = document.getElementById('copyBtn');
+const testBtn = document.getElementById('testBtn');
 
 // ==================== INITIALISIERUNG ====================
 function init() {
   console.log('Win Challenge Control initializing...');
-  
-  // Konfiguration laden
-  supabaseUrlInput.value = supabaseUrl;
-  supabaseKeyInput.value = supabaseKey;
   
   // Lokale Daten laden
   loadLocalData();
@@ -748,187 +572,113 @@ function init() {
   renderGamesList();
   updateStats();
   
-  // Mit Supabase verbinden (automatisch mit gespeicherten Credentials)
-  if (supabaseUrl && supabaseKey) {
-    setTimeout(() => {
-      connectToSupabase();
-    }, 1000);
-  }
+  // User ID generieren
+  currentUser = 'streamer_' + Math.random().toString(36).substr(2, 9);
+  console.log('User ID:', currentUser);
   
   // Tastatur-Shortcuts
   setupKeyboardShortcuts();
   
-  console.log('Initialisierung abgeschlossen');
-}
-
-// ==================== SUPABASE FUNKTIONEN ====================
-
-// Verbindung zu Supabase herstellen
-function connectToSupabase() {
-  updateConnectionStatus('syncing');
-  
-  try {
-    supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-    
-    // Verbindung testen
-    testSupabaseConnection().then(success => {
-      if (success) {
-        updateConnectionStatus('connected');
-        showConfigStatus('✅ Erfolgreich mit Supabase verbunden!', 'success');
-        
-        // Echtzeit-Updates einrichten
-        setupRealtimeSubscription();
-        
-        // Daten von Cloud laden
-        loadFromCloud();
-        
-        // URL für Overlay generieren
-        setTimeout(() => {
-          generateOverlayURL();
-        }, 500);
-        
-      } else {
-        updateConnectionStatus('disconnected');
-        showConfigStatus('❌ Verbindung zu Supabase fehlgeschlagen', 'error');
-      }
-    });
-    
-  } catch (error) {
-    console.error('Fehler beim Verbinden mit Supabase:', error);
-    updateConnectionStatus('disconnected');
-    showConfigStatus('❌ Fehler bei der Verbindung', 'error');
+  // Prüfen ob bereits Daten vorhanden sind
+  if (gamesData.length > 0) {
+    enableGameControls();
   }
 }
 
-// Supabase-Verbindung testen
-async function testSupabaseConnection() {
-  if (!supabase) return false;
+// ==================== CLOUD FUNKTIONEN ====================
+
+// Mit Cloud verbinden
+async function connectToCloud() {
+  console.log('Versuche Verbindung zu Supabase...');
+  
+  updateCloudStatus('connecting', 'Verbindung wird hergestellt...');
+  connectBtn.disabled = true;
+  connectBtn.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i> Verbinde...';
   
   try {
-    // Einfacher Test ohne spezifische Tabelle
-    const { data, error } = await supabase.rpc('version');
+    // Supabase Client erstellen
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // Einfachen Test durchführen
+    const { data, error } = await supabase.from('win_challenge').select('count').limit(1);
     
     if (error) {
-      console.log('Supabase ist erreichbar, aber Tabelle fehlt');
-      return true; // Verbindung OK, Tabelle muss erstellt werden
-    }
-    
-    return true;
-  } catch (error) {
-    console.error('Verbindungstest fehlgeschlagen:', error);
-    return false;
-  }
-}
-
-// Supabase Tabelle erstellen (falls nicht vorhanden)
-async function createSupabaseTable() {
-  console.log('Versuche, Supabase-Tabelle zu erstellen...');
-  showConfigStatus('⚠️ Erstelle Datenbank-Tabelle...', 'warning');
-  
-  // Hinweis für den Nutzer
-  alert('Bitte gehe zu supabase.com → Table Editor und erstelle eine Tabelle namens "win_challenge" mit diesen Spalten:\n\n' +
-        '- id: bigint, primary key, auto-increment\n' +
-        '- user_id: text\n' +
-        '- data: jsonb\n' +
-        '- created_at: timestamp (default: now())\n' +
-        '- updated_at: timestamp (default: now())\n\n' +
-        'Danach hier auf OK klicken.');
-  
-  return true;
-}
-
-// Konfiguration speichern
-function saveSupabaseConfig() {
-  const url = supabaseUrlInput.value.trim();
-  const key = supabaseKeyInput.value.trim();
-  
-  if (!url || !key) {
-    showConfigStatus('❌ Bitte URL und Key eingeben!', 'error');
-    return;
-  }
-  
-  // Temporären Client zum Testen erstellen
-  const tempSupabase = window.supabase.createClient(url, key);
-  
-  tempSupabase.from('win_challenge').select('count').limit(1)
-    .then(({ error }) => {
-      if (error && error.code !== '42P01') { // 42P01 = Tabelle existiert nicht
+      if (error.code === '42P01') {
+        // Tabelle existiert nicht - das ist OK für den Test
+        console.log('Tabelle existiert noch nicht, aber Verbindung funktioniert');
+        isCloudConnected = true;
+        updateCloudStatus('connected', '✅ Mit Cloud verbunden (Tabelle wird beim ersten Sync erstellt)');
+      } else {
         throw error;
       }
-      
-      // Erfolg - speichern
-      supabaseUrl = url;
-      supabaseKey = key;
-      
-      localStorage.setItem('supabaseUrl', url);
-      localStorage.setItem('supabaseKey', key);
-      
-      // Neu verbinden
-      supabase = tempSupabase;
-      showConfigStatus('✅ Verbindung erfolgreich gespeichert!', 'success');
-      connectToSupabase();
-      
-    })
-    .catch(error => {
-      console.error('Fehler beim Testen der Verbindung:', error);
-      showConfigStatus('❌ Verbindung fehlgeschlagen. Überprüfe URL und Key.', 'error');
-    });
+    } else {
+      isCloudConnected = true;
+      updateCloudStatus('connected', '✅ Erfolgreich mit Cloud verbunden');
+    }
+    
+    // Buttons aktivieren
+    generateBtn.disabled = false;
+    copyBtn.disabled = false;
+    testBtn.disabled = false;
+    
+    // Connection Status aktualisieren
+    connectionStatus.className = 'connection-status status-connected';
+    connectionStatus.innerHTML = '<div class="sync-animation" style="background: white;"></div><span>✅ Mit Cloud verbunden</span>';
+    
+    // Falls bereits Daten vorhanden sind, in Cloud speichern
+    if (gamesData.length > 0) {
+      setTimeout(uploadToCloud, 1000);
+    }
+    
+    // Load from cloud (falls vorhanden)
+    setTimeout(loadFromCloud, 1500);
+    
+  } catch (error) {
+    console.error('Fehler bei der Cloud-Verbindung:', error);
+    isCloudConnected = false;
+    updateCloudStatus('error', '❌ Verbindung fehlgeschlagen: ' + error.message);
+    
+    connectionStatus.className = 'connection-status status-disconnected';
+    connectionStatus.innerHTML = '<div class="sync-animation" style="background: white;"></div><span>❌ Cloud-Verbindung fehlgeschlagen</span>';
+  }
+  
+  connectBtn.disabled = false;
+  connectBtn.innerHTML = '<i class="fas fa-plug"></i> Erneut verbinden';
 }
 
-// Echtzeit-Updates einrichten
-function setupRealtimeSubscription() {
-  if (!supabase || realtimeChannel) return;
+// Cloud Status aktualisieren
+function updateCloudStatus(status, message) {
+  cloudStatus.style.display = 'block';
+  cloudStatusText.textContent = message;
   
-  realtimeChannel = supabase
-    .channel('win-challenge-realtime')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'win_challenge',
-        filter: `user_id=eq.${USER_ID}`
-      },
-      (payload) => {
-        console.log('Echtzeit-Update empfangen:', payload);
-        
-        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
-          const cloudData = payload.new?.data;
-          if (cloudData && Array.isArray(cloudData)) {
-            // Prüfen ob Daten sich geändert haben
-            if (JSON.stringify(gamesData) !== JSON.stringify(cloudData)) {
-              gamesData = cloudData;
-              saveLocalData();
-              renderGamesList();
-              updateStats();
-              showSyncNotification('☁️ Cloud-Update empfangen');
-            }
-          }
-        }
-      }
-    )
-    .subscribe((status) => {
-      console.log('Echtzeit-Abonnement Status:', status);
-    });
+  switch(status) {
+    case 'connecting':
+      cloudStatusIcon.style.background = '#ffa502';
+      break;
+    case 'connected':
+      cloudStatusIcon.style.background = '#00D8A7';
+      break;
+    case 'error':
+      cloudStatusIcon.style.background = '#ff4757';
+      break;
+  }
 }
 
 // Daten in Cloud hochladen
 async function uploadToCloud() {
-  if (!supabase) {
-    showSyncNotification('⚠️ Keine Cloud-Verbindung');
-    return;
-  }
-  
-  updateConnectionStatus('syncing');
+  if (!supabase || !isCloudConnected) return;
   
   try {
+    console.log('Lade Daten in Cloud hoch...', gamesData);
+    
     // Prüfen ob Eintrag existiert
-    const { data: existing } = await supabase
+    const { data: existing, error: fetchError } = await supabase
       .from('win_challenge')
       .select('id')
-      .eq('user_id', USER_ID)
-      .single()
-      .catch(() => ({ data: null }));
+      .eq('user_id', currentUser)
+      .maybeSingle();
+    
+    if (fetchError && fetchError.code !== 'PGRST116') throw fetchError;
     
     if (existing) {
       // Aktualisieren
@@ -938,52 +688,66 @@ async function uploadToCloud() {
           data: gamesData,
           updated_at: new Date().toISOString()
         })
-        .eq('user_id', USER_ID);
+        .eq('user_id', currentUser);
       
       if (error) throw error;
+      console.log('Daten in Cloud aktualisiert');
     } else {
       // Neu erstellen
       const { error } = await supabase
         .from('win_challenge')
         .insert([{
-          user_id: USER_ID,
+          user_id: currentUser,
           data: gamesData,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }]);
       
-      if (error) throw error;
+      if (error) {
+        // Falls Tabelle nicht existiert, ignorieren
+        if (error.code === '42P01') {
+          console.log('Tabelle existiert noch nicht, wird beim ersten Eintrag erstellt');
+          return;
+        }
+        throw error;
+      }
+      console.log('Neue Daten in Cloud erstellt');
     }
     
-    updateConnectionStatus('connected');
-    showSyncNotification('✅ In Cloud gespeichert');
+    showNotification('✅ In Cloud gespeichert');
     
   } catch (error) {
     console.error('Fehler beim Hochladen in Cloud:', error);
-    updateConnectionStatus('connected');
-    showSyncNotification('⚠️ Cloud-Sync fehlgeschlagen');
+    showNotification('⚠️ Cloud-Sync fehlgeschlagen');
   }
 }
 
 // Daten von Cloud laden
 async function loadFromCloud() {
-  if (!supabase) return;
+  if (!supabase || !isCloudConnected) return;
   
   try {
     const { data, error } = await supabase
       .from('win_challenge')
       .select('data')
-      .eq('user_id', USER_ID)
+      .eq('user_id', currentUser)
       .single();
     
-    if (error && error.code !== 'PGRST116') throw error;
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // Keine Daten gefunden - das ist OK
+        console.log('Keine Cloud-Daten gefunden für User:', currentUser);
+        return;
+      }
+      throw error;
+    }
     
     if (data && data.data) {
       gamesData = data.data;
       saveLocalData();
       renderGamesList();
       updateStats();
-      showSyncNotification('☁️ Von Cloud geladen');
+      showNotification('☁️ Daten von Cloud geladen');
     }
     
   } catch (error) {
@@ -1002,12 +766,12 @@ function addGame() {
   const needed = parseInt(neededInput.value);
   
   if (!name || isNaN(needed) || needed < 1) {
-    alert('❌ Bitte gültigen Namen und Anzahl der benötigten Wins eingeben!');
+    showNotification('❌ Bitte gültigen Namen und Anzahl der benötigten Wins eingeben!', 'error');
     return;
   }
   
   if (gamesData.some(game => game.name.toLowerCase() === name.toLowerCase())) {
-    alert('❌ Ein Game mit diesem Namen existiert bereits!');
+    showNotification('❌ Ein Game mit diesem Namen existiert bereits!', 'error');
     return;
   }
   
@@ -1020,13 +784,17 @@ function addGame() {
   saveLocalData();
   renderGamesList();
   updateStats();
-  uploadToCloud();
+  
+  if (isCloudConnected) {
+    uploadToCloud();
+  }
   
   nameInput.value = '';
   neededInput.value = '10';
   nameInput.focus();
   
-  showSyncNotification('🎮 Game hinzugefügt');
+  enableGameControls();
+  showNotification('🎮 Game hinzugefügt');
 }
 
 // Wins ändern
@@ -1035,7 +803,10 @@ function changeWins(index, delta) {
   saveLocalData();
   renderGamesList();
   updateStats();
-  uploadToCloud();
+  
+  if (isCloudConnected) {
+    uploadToCloud();
+  }
   
   const gameCard = document.querySelector(`[data-index="${index}"]`);
   if (gameCard) {
@@ -1054,9 +825,12 @@ function removeGame(index) {
   saveLocalData();
   renderGamesList();
   updateStats();
-  uploadToCloud();
   
-  showSyncNotification(`🗑️ "${gameName}" gelöscht`);
+  if (isCloudConnected) {
+    uploadToCloud();
+  }
+  
+  showNotification(`🗑️ "${gameName}" gelöscht`);
 }
 
 // ==================== UI FUNKTIONEN ====================
@@ -1134,116 +908,91 @@ function updateStats() {
 
 // Overlay URL generieren
 function generateOverlayURL() {
-  if (!supabase) {
-    alert('❌ Bitte zuerst mit der Cloud verbinden!');
+  if (!isCloudConnected) {
+    showNotification('❌ Bitte zuerst mit Cloud verbinden!', 'error');
     return;
   }
   
-  const baseUrl = window.location.origin + window.location.pathname;
-  const overlayPath = baseUrl.replace('control.html', 'index.html');
-  currentOverlayURL = `${overlayPath}?user=${USER_ID}`;
+  // GitHub Pages URL (ändere dies zu deiner GitHub Pages URL)
+  const githubPagesUrl = window.location.origin.includes('github.io') 
+    ? window.location.origin 
+    : 'https://xrewins.github.io/winchallangeoverlay';
   
-  overlayUrlInput.value = currentOverlayURL;
+  const overlayUrl = `${githubPagesUrl}/index.html?user=${currentUser}`;
+  overlayUrlInput.value = overlayUrl;
   overlayUrlInput.focus();
   
-  // Button Feedback
-  copyBtn.innerHTML = '<i class="far fa-copy"></i> Bereit zum Kopieren';
-  copyBtn.style.background = 'var(--primary)';
-  
-  setTimeout(() => {
-    copyBtn.innerHTML = '<i class="far fa-copy"></i> Kopieren';
-    copyBtn.style.background = '';
-  }, 2000);
-  
-  console.log('Overlay URL generiert:', currentOverlayURL);
-  showSyncNotification('🔗 Overlay-URL erstellt');
+  showNotification('🔗 Overlay-URL erstellt');
 }
 
 // URL kopieren
 function copyURL() {
-  if (!currentOverlayURL) {
-    alert('❌ Bitte zuerst eine URL generieren!');
+  if (!overlayUrlInput.value || overlayUrlInput.value === 'Bitte zuerst mit Cloud verbinden') {
+    showNotification('❌ Bitte zuerst eine URL generieren!', 'error');
     return;
   }
   
   overlayUrlInput.select();
   overlayUrlInput.setSelectionRange(0, 99999);
   
-  navigator.clipboard.writeText(currentOverlayURL)
+  navigator.clipboard.writeText(overlayUrlInput.value)
     .then(() => {
-      copyBtn.innerHTML = '<i class="fas fa-check"></i> Kopiert!';
-      copyBtn.style.background = 'var(--success)';
-      
-      setTimeout(() => {
-        copyBtn.innerHTML = '<i class="far fa-copy"></i> Kopieren';
-        copyBtn.style.background = '';
-      }, 2000);
-      
-      showSyncNotification('📋 URL kopiert! In OBS einfügen.');
+      showNotification('📋 URL kopiert! In OBS einfügen.');
     })
     .catch(err => {
       console.error('Fehler beim Kopieren:', err);
-      alert('❌ Fehler beim Kopieren der URL');
+      showNotification('❌ Fehler beim Kopieren', 'error');
     });
 }
 
 // Overlay testen
 function testOverlay() {
-  if (!currentOverlayURL) {
-    alert('❌ Bitte zuerst eine URL generieren!');
+  if (!overlayUrlInput.value || overlayUrlInput.value === 'Bitte zuerst mit Cloud verbinden') {
+    showNotification('❌ Bitte zuerst eine URL generieren!', 'error');
     return;
   }
   
-  window.open(currentOverlayURL, '_blank', 'width=400,height=500,scrollbars=no');
+  window.open(overlayUrlInput.value, '_blank', 'width=400,height=500');
+}
+
+// Game Controls aktivieren
+function enableGameControls() {
+  // Diese Funktion aktiviert alle Buttons nachdem Games hinzugefügt wurden
+  const buttons = document.querySelectorAll('.game-actions button');
+  buttons.forEach(btn => {
+    btn.disabled = false;
+  });
 }
 
 // ==================== HELPER FUNKTIONEN ====================
 
-// Verbindungsstatus aktualisieren
-function updateConnectionStatus(status) {
-  connectionStatus.className = 'connection-status';
-  
-  switch(status) {
-    case 'connected':
-      connectionStatus.classList.add('status-connected');
-      connectionStatus.innerHTML = '<div class="sync-animation" style="background: white;"></div><span>✅ Live mit Cloud verbunden</span>';
-      break;
-    case 'syncing':
-      connectionStatus.classList.add('status-syncing');
-      connectionStatus.innerHTML = '<div class="sync-animation" style="background: white;"></div><span>🔄 Synchronisiere...</span>';
-      break;
-    case 'disconnected':
-      connectionStatus.classList.add('status-disconnected');
-      connectionStatus.innerHTML = '<div class="sync-animation" style="background: white;"></div><span>❌ Keine Cloud-Verbindung</span>';
-      break;
-  }
-}
-
-// Konfigurationsstatus anzeigen
-function showConfigStatus(message, type) {
-  configStatus.style.display = 'block';
-  configStatus.style.background = type === 'success' ? 'rgba(0,216,167,0.2)' : 
-                                  type === 'warning' ? 'rgba(255,165,2,0.2)' : 'rgba(255,71,87,0.2)';
-  configStatus.style.color = type === 'success' ? '#00D8A7' : 
-                            type === 'warning' ? '#ffa502' : '#ff4757';
-  configStatus.style.border = `1px solid ${type === 'success' ? 'rgba(0,216,167,0.3)' : 
-                                type === 'warning' ? 'rgba(255,165,2,0.3)' : 'rgba(255,71,87,0.3)'}`;
-  configStatus.textContent = message;
-  
-  setTimeout(() => {
-    configStatus.style.display = 'none';
-  }, 5000);
-}
-
-// Sync-Benachrichtigung anzeigen
-function showSyncNotification(message) {
-  const existing = document.querySelector('.sync-notification');
-  if (existing) existing.remove();
+// Benachrichtigung anzeigen
+function showNotification(message, type = 'success') {
+  // Alte Benachrichtigungen entfernen
+  const oldNotifications = document.querySelectorAll('.notification');
+  oldNotifications.forEach(n => n.remove());
   
   const notification = document.createElement('div');
-  notification.className = 'sync-notification';
+  notification.className = `notification ${type}`;
+  notification.style.cssText = `
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    z-index: 1001;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideUp 0.3s ease, slideDown 0.3s ease 2.7s;
+    background: ${type === 'error' ? 'rgba(255, 71, 87, 0.95)' : 'rgba(0, 216, 167, 0.95)'};
+    color: white;
+  `;
+  
   notification.innerHTML = `
-    <i class="fas fa-cloud-upload-alt"></i>
+    <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
     <span>${message}</span>
   `;
   
@@ -1273,15 +1022,6 @@ function setupKeyboardShortcuts() {
     if (e.target.id === 'gameName' && e.key === 'Enter') {
       addGame();
     }
-    
-    // Strg+S speichert/synchronisiert
-    if (e.ctrlKey && e.key === 's') {
-      e.preventDefault();
-      if (supabase) {
-        uploadToCloud();
-        showSyncNotification('💾 Manuell synchronisiert');
-      }
-    }
   });
 }
 
@@ -1290,4 +1030,3 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
-
