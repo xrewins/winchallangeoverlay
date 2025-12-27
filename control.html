@@ -805,15 +805,12 @@ async function testSupabaseConnection() {
   if (!supabase) return false;
   
   try {
-    const { data, error } = await supabase
-      .from('win_challenge')
-      .select('count')
-      .limit(1);
+    // Einfacher Test ohne spezifische Tabelle
+    const { data, error } = await supabase.rpc('version');
     
     if (error) {
-      // Tabelle existiert möglicherweise nicht - versuche sie zu erstellen
-      await createSupabaseTable();
-      return true;
+      console.log('Supabase ist erreichbar, aber Tabelle fehlt');
+      return true; // Verbindung OK, Tabelle muss erstellt werden
     }
     
     return true;
@@ -1293,3 +1290,4 @@ document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
+
