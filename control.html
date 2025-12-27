@@ -7,56 +7,71 @@
 </head>
 <body class="control">
 
-<h1>🎮 Win Challenge Control</h1>
+<div class="panel">
+  <h1>🎮 Win Challenge</h1>
 
-<input id="name" placeholder="Game Name">
-<input id="needed" type="number" placeholder="Wins benötigt">
-<button onclick="addGame()">Game hinzufügen</button>
+  <input id="gameName" placeholder="Game Name">
+  <input id="gameNeeded" type="number" placeholder="Wins benötigt">
+  <button onclick="addGame()">➕ Hinzufügen</button>
 
-<div id="list"></div>
+  <div id="list"></div>
+</div>
 
 <script>
+function getData() {
+  return JSON.parse(localStorage.getItem("winChallenge")) || [];
+}
+
+function saveData(data) {
+  localStorage.setItem("winChallenge", JSON.stringify(data));
+}
+
 function load() {
-  const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
+  const data = getData();
   const list = document.getElementById("list");
   list.innerHTML = "";
 
   data.forEach((g, i) => {
     list.innerHTML += `
-      <div class="control-card">
-        <strong>${g.name}</strong><br>
-        ${g.current}/${g.needed}
-        <br>
-        <button onclick="change(${i},1)">+1</button>
-        <button onclick="change(${i},-1)">-1</button>
-        <button onclick="removeGame(${i})">❌</button>
+      <div class="control-card ${g.current >= g.needed ? 'done' : ''}">
+        <div class="title">${g.name}</div>
+        <div class="wins">${g.current} / ${g.needed}</div>
+        <div class="buttons">
+          <button onclick="change(${i},1)">+1</button>
+          <button onclick="change(${i},-1)">-1</button>
+          <button onclick="removeGame(${i})">✖</button>
+        </div>
       </div>
     `;
   });
 }
 
 function addGame() {
-  const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
-  data.push({
-    name: name.value,
-    needed: Number(needed.value),
-    current: 0
-  });
-  localStorage.setItem("winChallenge", JSON.stringify(data));
+  const name = document.getElementById("gameName").value.trim();
+  const needed = Number(document.getElementById("gameNeeded").value);
+
+  if (!name || needed <= 0) return alert("Bitte Game & Wins angeben");
+
+  const data = getData();
+  data.push({ name, needed, current: 0 });
+  saveData(data);
+
+  gameName.value = "";
+  gameNeeded.value = "";
   load();
 }
 
 function change(i, v) {
-  const data = JSON.parse(localStorage.getItem("winChallenge"));
+  const data = getData();
   data[i].current = Math.max(0, data[i].current + v);
-  localStorage.setItem("winChallenge", JSON.stringify(data));
+  saveData(data);
   load();
 }
 
 function removeGame(i) {
-  const data = JSON.parse(localStorage.getItem("winChallenge"));
-  data.splice(i,1);
-  localStorage.setItem("winChallenge", JSON.stringify(data));
+  const data = getData();
+  data.splice(i, 1);
+  saveData(data);
   load();
 }
 
