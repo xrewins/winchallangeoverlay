@@ -44,7 +44,7 @@ body {
 /* Header */
 .header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   padding-bottom: 20px;
   border-bottom: 1px solid var(--border);
 }
@@ -60,6 +60,119 @@ body {
 .header-subtitle {
   color: var(--text-muted);
   font-size: 1.1rem;
+}
+
+/* Connection Status */
+.connection-status {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.status-connected {
+  background: rgba(0, 216, 167, 0.9);
+  color: white;
+  border: 2px solid rgba(0, 216, 167, 0.4);
+}
+
+.status-disconnected {
+  background: rgba(255, 71, 87, 0.9);
+  color: white;
+  border: 2px solid rgba(255, 71, 87, 0.4);
+}
+
+.status-syncing {
+  background: rgba(255, 165, 2, 0.9);
+  color: white;
+  border: 2px solid rgba(255, 165, 2, 0.4);
+}
+
+.sync-animation {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Supabase Config Panel */
+.supabase-config {
+  background: rgba(0, 216, 167, 0.1);
+  border: 2px solid rgba(0, 216, 167, 0.3);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 30px;
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.supabase-config h3 {
+  color: var(--primary);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.config-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.config-inputs input {
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: white;
+  font-family: 'Monaco', 'Consolas', monospace;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.config-inputs input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 216, 167, 0.2);
+}
+
+.config-inputs input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+#configStatus {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Main Layout */
@@ -103,25 +216,31 @@ body {
 
 #overlay-url {
   width: 100%;
-  padding: 12px 15px;
+  padding: 14px;
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text);
   font-family: monospace;
   font-size: 0.9rem;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   word-break: break-all;
+  transition: all 0.3s ease;
+}
+
+#overlay-url:focus {
+  outline: none;
+  border-color: var(--primary);
 }
 
 .url-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .btn {
-  padding: 12px 20px;
+  padding: 14px 22px;
   border: none;
   border-radius: 10px;
   font-weight: 600;
@@ -129,7 +248,7 @@ body {
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 0.95rem;
 }
 
@@ -140,7 +259,7 @@ body {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 216, 167, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 216, 167, 0.4);
 }
 
 .btn-secondary {
@@ -151,45 +270,47 @@ body {
 
 .btn-secondary:hover {
   background: var(--border);
+  transform: translateY(-2px);
 }
 
 .btn-small {
-  padding: 8px 15px;
-  font-size: 0.85rem;
+  padding: 10px 18px;
+  font-size: 0.9rem;
 }
 
 /* Game Form */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .form-input {
   width: 100%;
-  padding: 12px 15px;
+  padding: 14px;
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--text);
   font-size: 1rem;
-  transition: border 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .form-input:focus {
   outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 216, 167, 0.2);
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 2fr 1fr auto;
-  gap: 10px;
+  gap: 12px;
   align-items: end;
 }
 
@@ -198,37 +319,41 @@ body {
   max-height: 400px;
   overflow-y: auto;
   padding-right: 10px;
+  margin-top: 20px;
 }
 
 .game-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 12px;
+  padding: 18px;
+  margin-bottom: 15px;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .game-card:hover {
   border-color: var(--primary);
   transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .game-card.completed {
   border-color: var(--success);
-  background: rgba(0, 216, 167, 0.05);
+  background: rgba(0, 216, 167, 0.08);
 }
 
 .game-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .game-name {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 600;
+  color: var(--text);
 }
 
 .game-progress {
@@ -238,20 +363,35 @@ body {
 }
 
 .progress-text {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--primary);
   min-width: 80px;
+  text-align: center;
+}
+
+.game-progress-bar {
+  width: 60px;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.game-progress-fill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
 }
 
 .game-actions {
   display: flex;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 10px;
+  margin-top: 15px;
 }
 
 .btn-icon {
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -259,6 +399,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 600;
 }
 
 .btn-add {
@@ -285,6 +426,7 @@ body {
   background: transparent;
   color: var(--text-muted);
   border: 1px solid var(--border);
+  margin-left: auto;
 }
 
 .btn-delete:hover {
@@ -293,134 +435,177 @@ body {
   border-color: var(--danger);
 }
 
-/* Status Bar */
-.status-bar {
+/* Stats Bar */
+.stats-bar {
   background: var(--bg-card);
-  border-radius: 12px;
-  padding: 15px;
-  margin-top: 20px;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 30px;
   border: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
 }
 
-.status-item {
+@media (max-width: 768px) {
+  .stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-item {
   text-align: center;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
-.status-value {
-  font-size: 1.5rem;
-  font-weight: 700;
+.stat-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-3px);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 800;
   color: var(--primary);
+  margin-bottom: 5px;
 }
 
-.status-label {
+.stat-label {
   font-size: 0.9rem;
   color: var(--text-muted);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-input);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
-}
-
-/* Animations */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.pulse {
-  animation: pulse 0.5s ease;
-}
-
-/* Live Badge */
-.live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  background: rgba(0, 216, 167, 0.2);
-  color: var(--primary);
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  border: 1px solid rgba(0, 216, 167, 0.3);
-}
-
-.live-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--primary);
-  border-radius: 50%;
-  animation: pulse 1.5s infinite;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Instructions */
 .instructions {
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 30px;
+  border-radius: 16px;
+  padding: 25px;
+  margin-top: 40px;
   border: 1px solid var(--border);
 }
 
 .instructions h3 {
   color: var(--primary);
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .instructions ol {
-  padding-left: 20px;
+  padding-left: 25px;
   line-height: 1.8;
   color: var(--text-muted);
 }
 
 .instructions li {
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  padding-left: 10px;
+}
+
+.instructions li strong {
+  color: var(--text);
 }
 
 /* Empty State */
 .empty-state {
   text-align: center;
-  padding: 40px 20px;
+  padding: 50px 20px;
   color: var(--text-muted);
 }
 
 .empty-state i {
-  font-size: 3rem;
-  margin-bottom: 15px;
+  font-size: 3.5rem;
+  margin-bottom: 20px;
   opacity: 0.5;
+}
+
+/* Sync Notification */
+.sync-notification {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: rgba(0, 216, 167, 0.95);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  z-index: 1001;
+  box-shadow: 0 6px 25px rgba(0, 216, 167, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideUp 0.3s ease, slideDown 0.3s ease 2.7s;
+  transform-origin: bottom right;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100px) scale(0.8); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(0) scale(1); opacity: 1; }
+  to { transform: translateY(100px) scale(0.8); opacity: 0; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-input);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
 }
 </style>
 </head>
 <body>
 
+<!-- Connection Status -->
+<div id="connectionStatus" class="connection-status status-disconnected">
+  <div class="sync-animation"></div>
+  <span>Verbindung wird hergestellt...</span>
+</div>
+
 <div class="container">
   <!-- Header -->
   <div class="header">
     <h1><i class="fas fa-trophy"></i> Win Challenge Control</h1>
-    <p class="header-subtitle">Verwalte deine Games und Overlay für den Stream</p>
-    <div class="live-badge">
-      <div class="live-dot"></div>
-      LIVE SYNC
+    <p class="header-subtitle">Echtzeit-Game-Tracking für deinen Stream</p>
+  </div>
+
+  <!-- Supabase Configuration -->
+  <div class="supabase-config">
+    <h3><i class="fas fa-cloud"></i> Cloud-Verbindung</h3>
+    <p style="color: rgba(255,255,255,0.7); margin: 10px 0 15px 0; font-size: 0.95rem; line-height: 1.6;">
+      <i class="fas fa-info-circle" style="color: var(--primary); margin-right: 8px;"></i>
+      Für Echtzeit-Updates zwischen Control und Overlay. Daten werden sicher in der Cloud gespeichert.
+    </p>
+    
+    <div class="config-inputs">
+      <input type="text" id="supabaseUrl" placeholder="Supabase Project URL" value="https://ghzodgqipchpgwljdumn.supabase.co">
+      <input type="text" id="supabaseKey" placeholder="Supabase anon/public key" value="sb_publishable_WdoRvQS8nS2RTOFGvVcY8w_EukbvYTq">
+      <button onclick="saveSupabaseConfig()" class="btn btn-primary" style="grid-column: span 2;">
+        <i class="fas fa-plug"></i> Mit Cloud verbinden
+      </button>
     </div>
+    
+    <div id="configStatus" style="margin-top: 15px; padding: 12px; border-radius: 10px; display: none;"></div>
   </div>
 
   <!-- Main Content -->
@@ -443,7 +628,6 @@ body {
 
       <!-- Games List -->
       <div id="gamesList" class="games-list">
-        <!-- Games werden hier dynamisch eingefügt -->
         <div class="empty-state">
           <i class="fas fa-gamepad"></i>
           <p>Noch keine Games hinzugefügt</p>
@@ -454,83 +638,363 @@ body {
 
     <!-- Right Panel: Overlay Control -->
     <div class="panel url-generator">
-      <h2 class="panel-title"><i class="fas fa-satellite-dish"></i> Overlay Steuerung</h2>
+      <h2 class="panel-title"><i class="fas fa-satellite-dish"></i> Overlay für OBS</h2>
       
       <div class="form-group">
-        <label>Overlay URL für OBS</label>
+        <label>Overlay URL (in OBS als Browserquelle einfügen)</label>
         <input type="text" id="overlay-url" class="form-input" readonly 
-               value="Klicke auf 'URL generieren' um die Overlay-URL zu erstellen">
+               value="Bitte zuerst mit der Cloud verbinden">
       </div>
       
       <div class="url-actions">
         <button onclick="generateOverlayURL()" class="btn btn-primary">
-          <i class="fas fa-link"></i> URL generieren
+          <i class="fas fa-link"></i> Overlay-URL erstellen
         </button>
         <button onclick="copyURL()" class="btn btn-secondary" id="copyBtn">
           <i class="far fa-copy"></i> Kopieren
         </button>
         <button onclick="testOverlay()" class="btn btn-secondary">
-          <i class="fas fa-external-link-alt"></i> Testen
+          <i class="fas fa-external-link-alt"></i> Vorschau
         </button>
       </div>
 
       <!-- Live Update Info -->
-      <div style="margin-top: 20px; padding: 15px; background: rgba(0,216,167,0.1); border-radius: 10px; border-left: 4px solid var(--primary);">
-        <h4 style="color: var(--primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-          <i class="fas fa-sync-alt"></i> Live-Update aktiv
+      <div style="margin-top: 25px; padding: 18px; background: rgba(0,216,167,0.1); border-radius: 12px; border-left: 4px solid var(--primary);">
+        <h4 style="color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-bolt"></i> Echtzeit-Funktionen aktiv
         </h4>
-        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">
-          Änderungen werden automatisch an das Overlay gesendet. Stelle sicher, dass die gleiche URL in OBS verwendet wird.
-        </p>
+        <div style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+          <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Alle Änderungen werden sofort ins Overlay übertragen</p>
+          <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Kein manuelles Aktualisieren notwendig</p>
+          <p><i class="fas fa-check-circle" style="color: var(--primary); margin-right: 8px;"></i> Funktioniert auch bei Stream-Unterbrechungen</p>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Stats Bar -->
-  <div class="status-bar">
-    <div class="status-item">
-      <div class="status-value" id="totalGames">0</div>
-      <div class="status-label">Total Games</div>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-value" id="totalGames">0</div>
+      <div class="stat-label">Total Games</div>
     </div>
-    <div class="status-item">
-      <div class="status-value" id="completedGames">0</div>
-      <div class="status-label">Abgeschlossen</div>
+    <div class="stat-item">
+      <div class="stat-value" id="completedGames">0</div>
+      <div class="stat-label">Abgeschlossen</div>
     </div>
-    <div class="status-item">
-      <div class="status-value" id="totalWins">0/0</div>
-      <div class="status-label">Wins (Aktuell/Goal)</div>
+    <div class="stat-item">
+      <div class="stat-value" id="totalWins">0/0</div>
+      <div class="stat-label">Wins (Aktuell/Goal)</div>
     </div>
-    <div class="status-item">
-      <div class="status-value" id="progressPercent">0%</div>
-      <div class="status-label">Gesamtfortschritt</div>
+    <div class="stat-item">
+      <div class="stat-value" id="progressPercent">0%</div>
+      <div class="stat-label">Gesamtfortschritt</div>
     </div>
   </div>
 
   <!-- Instructions -->
   <div class="instructions">
-    <h3><i class="fas fa-info-circle"></i> So funktioniert's:</h3>
+    <h3><i class="fas fa-rocket"></i> In 3 Schritten starten:</h3>
     <ol>
-      <li><strong>Games hinzufügen:</strong> Trage Name und benötigte Wins ein und klicke auf "Hinzufügen"</li>
-      <li><strong>Wins tracken:</strong> Nutze die ➕/➖ Buttons um Wins zu erhöhen/verringern</li>
-      <li><strong>Overlay einrichten:</strong> Klicke auf "URL generieren", kopiere die URL und füge sie in OBS als Browserquelle ein</li>
-      <li><strong>Live Updates:</strong> Alle Änderungen werden automatisch an das Overlay gesendet</li>
-      <li><strong>Streamen:</strong> Das Overlay erscheint jetzt im Stream und aktualisiert sich automatisch</li>
+      <li><strong>Mit Cloud verbinden:</strong> Klicke auf "Mit Cloud verbinden" (Supabase-Daten sind bereits eingetragen)</li>
+      <li><strong>Games hinzufügen:</strong> Füge deine Games mit Namen und benötigten Wins hinzu</li>
+      <li><strong>Overlay einrichten:</strong> Klicke auf "Overlay-URL erstellen", kopiere die URL und füge sie in OBS als Browserquelle ein</li>
     </ol>
+    <p style="margin-top: 20px; padding: 15px; background: rgba(0,216,167,0.1); border-radius: 10px; color: var(--text);">
+      <i class="fas fa-lightbulb" style="color: var(--primary); margin-right: 10px;"></i>
+      <strong>Tipp:</strong> Alle Änderungen werden automatisch live ins Overlay übertragen - kein manuelles Aktualisieren mehr nötig!
+    </p>
   </div>
 </div>
 
+<!-- Include Supabase JS Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-// Konfiguration - BITTE ANPASSEN!
-const GITHUB_PAGES_URL = "https://xrewins.github.io/winchallangeoverlay/"; // Deine GitHub Pages URL
+// ==================== SUPABASE KONFIGURATION ====================
+const DEFAULT_SUPABASE_URL = 'https://ghzodgqipchpgwljdumn.supabase.co';
+const DEFAULT_SUPABASE_KEY = 'sb_publishable_WdoRvQS8nS2RTOFGvVcY8w_EukbvYTq';
 
-// Initiale Daten laden
-let gamesData = JSON.parse(localStorage.getItem("winChallenge")) || [];
-let currentOverlayURL = "";
+// ==================== GLOBALE VARIABLEN ====================
+let supabase = null;
+let supabaseUrl = localStorage.getItem('supabaseUrl') || DEFAULT_SUPABASE_URL;
+let supabaseKey = localStorage.getItem('supabaseKey') || DEFAULT_SUPABASE_KEY;
+const USER_ID = 'streamer_' + Math.random().toString(36).substr(2, 9);
+let gamesData = [];
+let currentOverlayURL = '';
+let realtimeChannel = null;
 
-// DOM Elemente
+// ==================== DOM ELEMENTE ====================
+const connectionStatus = document.getElementById('connectionStatus');
+const supabaseUrlInput = document.getElementById('supabaseUrl');
+const supabaseKeyInput = document.getElementById('supabaseKey');
+const configStatus = document.getElementById('configStatus');
 const gamesListEl = document.getElementById('gamesList');
 const overlayUrlInput = document.getElementById('overlay-url');
 const copyBtn = document.getElementById('copyBtn');
+
+// ==================== INITIALISIERUNG ====================
+function init() {
+  console.log('Win Challenge Control initializing...');
+  
+  // Konfiguration laden
+  supabaseUrlInput.value = supabaseUrl;
+  supabaseKeyInput.value = supabaseKey;
+  
+  // Lokale Daten laden
+  loadLocalData();
+  
+  // UI aktualisieren
+  renderGamesList();
+  updateStats();
+  
+  // Mit Supabase verbinden (automatisch mit gespeicherten Credentials)
+  if (supabaseUrl && supabaseKey) {
+    setTimeout(() => {
+      connectToSupabase();
+    }, 1000);
+  }
+  
+  // Tastatur-Shortcuts
+  setupKeyboardShortcuts();
+  
+  console.log('Initialisierung abgeschlossen');
+}
+
+// ==================== SUPABASE FUNKTIONEN ====================
+
+// Verbindung zu Supabase herstellen
+function connectToSupabase() {
+  updateConnectionStatus('syncing');
+  
+  try {
+    supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    
+    // Verbindung testen
+    testSupabaseConnection().then(success => {
+      if (success) {
+        updateConnectionStatus('connected');
+        showConfigStatus('✅ Erfolgreich mit Supabase verbunden!', 'success');
+        
+        // Echtzeit-Updates einrichten
+        setupRealtimeSubscription();
+        
+        // Daten von Cloud laden
+        loadFromCloud();
+        
+        // URL für Overlay generieren
+        setTimeout(() => {
+          generateOverlayURL();
+        }, 500);
+        
+      } else {
+        updateConnectionStatus('disconnected');
+        showConfigStatus('❌ Verbindung zu Supabase fehlgeschlagen', 'error');
+      }
+    });
+    
+  } catch (error) {
+    console.error('Fehler beim Verbinden mit Supabase:', error);
+    updateConnectionStatus('disconnected');
+    showConfigStatus('❌ Fehler bei der Verbindung', 'error');
+  }
+}
+
+// Supabase-Verbindung testen
+async function testSupabaseConnection() {
+  if (!supabase) return false;
+  
+  try {
+    const { data, error } = await supabase
+      .from('win_challenge')
+      .select('count')
+      .limit(1);
+    
+    if (error) {
+      // Tabelle existiert möglicherweise nicht - versuche sie zu erstellen
+      await createSupabaseTable();
+      return true;
+    }
+    
+    return true;
+  } catch (error) {
+    console.error('Verbindungstest fehlgeschlagen:', error);
+    return false;
+  }
+}
+
+// Supabase Tabelle erstellen (falls nicht vorhanden)
+async function createSupabaseTable() {
+  console.log('Versuche, Supabase-Tabelle zu erstellen...');
+  showConfigStatus('⚠️ Erstelle Datenbank-Tabelle...', 'warning');
+  
+  // Hinweis für den Nutzer
+  alert('Bitte gehe zu supabase.com → Table Editor und erstelle eine Tabelle namens "win_challenge" mit diesen Spalten:\n\n' +
+        '- id: bigint, primary key, auto-increment\n' +
+        '- user_id: text\n' +
+        '- data: jsonb\n' +
+        '- created_at: timestamp (default: now())\n' +
+        '- updated_at: timestamp (default: now())\n\n' +
+        'Danach hier auf OK klicken.');
+  
+  return true;
+}
+
+// Konfiguration speichern
+function saveSupabaseConfig() {
+  const url = supabaseUrlInput.value.trim();
+  const key = supabaseKeyInput.value.trim();
+  
+  if (!url || !key) {
+    showConfigStatus('❌ Bitte URL und Key eingeben!', 'error');
+    return;
+  }
+  
+  // Temporären Client zum Testen erstellen
+  const tempSupabase = window.supabase.createClient(url, key);
+  
+  tempSupabase.from('win_challenge').select('count').limit(1)
+    .then(({ error }) => {
+      if (error && error.code !== '42P01') { // 42P01 = Tabelle existiert nicht
+        throw error;
+      }
+      
+      // Erfolg - speichern
+      supabaseUrl = url;
+      supabaseKey = key;
+      
+      localStorage.setItem('supabaseUrl', url);
+      localStorage.setItem('supabaseKey', key);
+      
+      // Neu verbinden
+      supabase = tempSupabase;
+      showConfigStatus('✅ Verbindung erfolgreich gespeichert!', 'success');
+      connectToSupabase();
+      
+    })
+    .catch(error => {
+      console.error('Fehler beim Testen der Verbindung:', error);
+      showConfigStatus('❌ Verbindung fehlgeschlagen. Überprüfe URL und Key.', 'error');
+    });
+}
+
+// Echtzeit-Updates einrichten
+function setupRealtimeSubscription() {
+  if (!supabase || realtimeChannel) return;
+  
+  realtimeChannel = supabase
+    .channel('win-challenge-realtime')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'win_challenge',
+        filter: `user_id=eq.${USER_ID}`
+      },
+      (payload) => {
+        console.log('Echtzeit-Update empfangen:', payload);
+        
+        if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+          const cloudData = payload.new?.data;
+          if (cloudData && Array.isArray(cloudData)) {
+            // Prüfen ob Daten sich geändert haben
+            if (JSON.stringify(gamesData) !== JSON.stringify(cloudData)) {
+              gamesData = cloudData;
+              saveLocalData();
+              renderGamesList();
+              updateStats();
+              showSyncNotification('☁️ Cloud-Update empfangen');
+            }
+          }
+        }
+      }
+    )
+    .subscribe((status) => {
+      console.log('Echtzeit-Abonnement Status:', status);
+    });
+}
+
+// Daten in Cloud hochladen
+async function uploadToCloud() {
+  if (!supabase) {
+    showSyncNotification('⚠️ Keine Cloud-Verbindung');
+    return;
+  }
+  
+  updateConnectionStatus('syncing');
+  
+  try {
+    // Prüfen ob Eintrag existiert
+    const { data: existing } = await supabase
+      .from('win_challenge')
+      .select('id')
+      .eq('user_id', USER_ID)
+      .single()
+      .catch(() => ({ data: null }));
+    
+    if (existing) {
+      // Aktualisieren
+      const { error } = await supabase
+        .from('win_challenge')
+        .update({
+          data: gamesData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', USER_ID);
+      
+      if (error) throw error;
+    } else {
+      // Neu erstellen
+      const { error } = await supabase
+        .from('win_challenge')
+        .insert([{
+          user_id: USER_ID,
+          data: gamesData,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }]);
+      
+      if (error) throw error;
+    }
+    
+    updateConnectionStatus('connected');
+    showSyncNotification('✅ In Cloud gespeichert');
+    
+  } catch (error) {
+    console.error('Fehler beim Hochladen in Cloud:', error);
+    updateConnectionStatus('connected');
+    showSyncNotification('⚠️ Cloud-Sync fehlgeschlagen');
+  }
+}
+
+// Daten von Cloud laden
+async function loadFromCloud() {
+  if (!supabase) return;
+  
+  try {
+    const { data, error } = await supabase
+      .from('win_challenge')
+      .select('data')
+      .eq('user_id', USER_ID)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error;
+    
+    if (data && data.data) {
+      gamesData = data.data;
+      saveLocalData();
+      renderGamesList();
+      updateStats();
+      showSyncNotification('☁️ Von Cloud geladen');
+    }
+    
+  } catch (error) {
+    console.error('Fehler beim Laden von Cloud:', error);
+  }
+}
+
+// ==================== GAME MANAGEMENT ====================
 
 // Game hinzufügen
 function addGame() {
@@ -541,13 +1005,12 @@ function addGame() {
   const needed = parseInt(neededInput.value);
   
   if (!name || isNaN(needed) || needed < 1) {
-    alert('Bitte gültigen Namen und Anzahl der benötigten Wins eingeben!');
+    alert('❌ Bitte gültigen Namen und Anzahl der benötigten Wins eingeben!');
     return;
   }
   
-  // Prüfen ob Game bereits existiert
   if (gamesData.some(game => game.name.toLowerCase() === name.toLowerCase())) {
-    alert('Ein Game mit diesem Namen existiert bereits!');
+    alert('❌ Ein Game mit diesem Namen existiert bereits!');
     return;
   }
   
@@ -557,26 +1020,26 @@ function addGame() {
     current: 0
   });
   
-  saveData();
+  saveLocalData();
   renderGamesList();
   updateStats();
-  updateOverlayURL();
+  uploadToCloud();
   
-  // Formular leeren und fokus setzen
   nameInput.value = '';
   neededInput.value = '10';
   nameInput.focus();
+  
+  showSyncNotification('🎮 Game hinzugefügt');
 }
 
 // Wins ändern
 function changeWins(index, delta) {
   gamesData[index].current = Math.max(0, gamesData[index].current + delta);
-  saveData();
+  saveLocalData();
   renderGamesList();
   updateStats();
-  updateOverlayURL();
+  uploadToCloud();
   
-  // Animation für das geänderte Game
   const gameCard = document.querySelector(`[data-index="${index}"]`);
   if (gameCard) {
     gameCard.classList.add('pulse');
@@ -586,23 +1049,25 @@ function changeWins(index, delta) {
 
 // Game entfernen
 function removeGame(index) {
-  if (confirm(`"${gamesData[index].name}" wirklich löschen?`)) {
-    gamesData.splice(index, 1);
-    saveData();
-    renderGamesList();
-    updateStats();
-    updateOverlayURL();
-  }
+  if (!confirm(`"${gamesData[index].name}" wirklich löschen?`)) return;
+  
+  const gameName = gamesData[index].name;
+  gamesData.splice(index, 1);
+  
+  saveLocalData();
+  renderGamesList();
+  updateStats();
+  uploadToCloud();
+  
+  showSyncNotification(`🗑️ "${gameName}" gelöscht`);
 }
 
-// Daten speichern
-function saveData() {
-  localStorage.setItem("winChallenge", JSON.stringify(gamesData));
-  console.log("Daten gespeichert:", gamesData);
-}
+// ==================== UI FUNKTIONEN ====================
 
 // Games Liste rendern
 function renderGamesList() {
+  if (!gamesListEl) return;
+  
   if (gamesData.length === 0) {
     gamesListEl.innerHTML = `
       <div class="empty-state">
@@ -626,21 +1091,20 @@ function renderGamesList() {
           <div class="game-name">${game.name}</div>
           <div class="game-progress">
             <div class="progress-text">${game.current}/${game.needed}</div>
-            <div style="width: 60px; background: #333; border-radius: 4px; height: 6px; overflow: hidden;">
-              <div style="width: ${percent}%; height: 100%; background: ${isCompleted ? '#00D8A7' : '#0099ff'};"></div>
+            <div class="game-progress-bar">
+              <div class="game-progress-fill" style="width: ${percent}%; background: ${isCompleted ? '#00D8A7' : '#0099ff'}"></div>
             </div>
           </div>
         </div>
         <div class="game-actions">
-          <button onclick="changeWins(${index}, -1)" class="btn-icon btn-remove" ${game.current <= 0 ? 'disabled style="opacity:0.5"' : ''}>
-            <i class="fas fa-minus"></i>
+          <button onclick="changeWins(${index}, -1)" class="btn-icon btn-remove" ${game.current <= 0 ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''}>
+            <i class="fas fa-minus"></i> Abzug
           </button>
           <button onclick="changeWins(${index}, 1)" class="btn-icon btn-add">
-            <i class="fas fa-plus"></i>
+            <i class="fas fa-plus"></i> Win
           </button>
-          <div style="flex-grow: 1;"></div>
           <button onclick="removeGame(${index})" class="btn-icon btn-delete">
-            <i class="fas fa-trash"></i> Löschen
+            <i class="fas fa-trash"></i>
           </button>
         </div>
       </div>
@@ -673,102 +1137,159 @@ function updateStats() {
 
 // Overlay URL generieren
 function generateOverlayURL() {
-  if (gamesData.length === 0) {
-    alert('Bitte zuerst Games hinzufügen!');
+  if (!supabase) {
+    alert('❌ Bitte zuerst mit der Cloud verbinden!');
     return;
   }
   
-  const jsonString = JSON.stringify(gamesData);
-  const encodedData = encodeURIComponent(jsonString);
-  currentOverlayURL = GITHUB_PAGES_URL + "?data=" + encodedData;
+  const baseUrl = window.location.origin + window.location.pathname;
+  const overlayPath = baseUrl.replace('control.html', 'index.html');
+  currentOverlayURL = `${overlayPath}?user=${USER_ID}`;
   
   overlayUrlInput.value = currentOverlayURL;
   overlayUrlInput.focus();
   
   // Button Feedback
-  const originalText = copyBtn.innerHTML;
   copyBtn.innerHTML = '<i class="far fa-copy"></i> Bereit zum Kopieren';
   copyBtn.style.background = 'var(--primary)';
   
   setTimeout(() => {
-    copyBtn.innerHTML = originalText;
+    copyBtn.innerHTML = '<i class="far fa-copy"></i> Kopieren';
     copyBtn.style.background = '';
   }, 2000);
   
   console.log('Overlay URL generiert:', currentOverlayURL);
-}
-
-// Overlay URL automatisch aktualisieren (für Live-Updates)
-function updateOverlayURL() {
-  if (currentOverlayURL) {
-    generateOverlayURL();
-  }
+  showSyncNotification('🔗 Overlay-URL erstellt');
 }
 
 // URL kopieren
 function copyURL() {
   if (!currentOverlayURL) {
-    alert('Bitte zuerst eine URL generieren!');
+    alert('❌ Bitte zuerst eine URL generieren!');
     return;
   }
   
   overlayUrlInput.select();
   overlayUrlInput.setSelectionRange(0, 99999);
   
-  navigator.clipboard.writeText(currentOverlayURL).then(() => {
-    // Visuelles Feedback
-    const originalText = copyBtn.innerHTML;
-    copyBtn.innerHTML = '<i class="fas fa-check"></i> Kopiert!';
-    copyBtn.style.background = 'var(--success)';
-    
-    setTimeout(() => {
-      copyBtn.innerHTML = originalText;
-      copyBtn.style.background = '';
-    }, 2000);
-    
-    console.log('URL kopiert:', currentOverlayURL);
-  }).catch(err => {
-    console.error('Fehler beim Kopieren:', err);
-    alert('Fehler beim Kopieren der URL');
-  });
+  navigator.clipboard.writeText(currentOverlayURL)
+    .then(() => {
+      copyBtn.innerHTML = '<i class="fas fa-check"></i> Kopiert!';
+      copyBtn.style.background = 'var(--success)';
+      
+      setTimeout(() => {
+        copyBtn.innerHTML = '<i class="far fa-copy"></i> Kopieren';
+        copyBtn.style.background = '';
+      }, 2000);
+      
+      showSyncNotification('📋 URL kopiert! In OBS einfügen.');
+    })
+    .catch(err => {
+      console.error('Fehler beim Kopieren:', err);
+      alert('❌ Fehler beim Kopieren der URL');
+    });
 }
 
 // Overlay testen
 function testOverlay() {
   if (!currentOverlayURL) {
-    alert('Bitte zuerst eine URL generieren!');
+    alert('❌ Bitte zuerst eine URL generieren!');
     return;
   }
   
-  window.open(currentOverlayURL, '_blank', 'width=400,height=500');
+  window.open(currentOverlayURL, '_blank', 'width=400,height=500,scrollbars=no');
 }
 
-// Tastatur Shortcuts
-document.addEventListener('keydown', (e) => {
-  if (e.target.id === 'gameName' && e.key === 'Enter') {
-    addGame();
-  }
-});
+// ==================== HELPER FUNKTIONEN ====================
 
-// Initialisierung
-function init() {
-  renderGamesList();
-  updateStats();
+// Verbindungsstatus aktualisieren
+function updateConnectionStatus(status) {
+  connectionStatus.className = 'connection-status';
   
-  // Versuche, eine URL aus der Session zu laden
-  const lastURL = sessionStorage.getItem('lastOverlayURL');
-  if (lastURL && gamesData.length > 0) {
-    currentOverlayURL = lastURL;
-    overlayUrlInput.value = currentOverlayURL;
+  switch(status) {
+    case 'connected':
+      connectionStatus.classList.add('status-connected');
+      connectionStatus.innerHTML = '<div class="sync-animation" style="background: white;"></div><span>✅ Live mit Cloud verbunden</span>';
+      break;
+    case 'syncing':
+      connectionStatus.classList.add('status-syncing');
+      connectionStatus.innerHTML = '<div class="sync-animation" style="background: white;"></div><span>🔄 Synchronisiere...</span>';
+      break;
+    case 'disconnected':
+      connectionStatus.classList.add('status-disconnected');
+      connectionStatus.innerHTML = '<div class="sync-animation" style="background: white;"></div><span>❌ Keine Cloud-Verbindung</span>';
+      break;
   }
-  
-  console.log('Control Panel geladen');
 }
 
-// Initial starten
-init();
+// Konfigurationsstatus anzeigen
+function showConfigStatus(message, type) {
+  configStatus.style.display = 'block';
+  configStatus.style.background = type === 'success' ? 'rgba(0,216,167,0.2)' : 
+                                  type === 'warning' ? 'rgba(255,165,2,0.2)' : 'rgba(255,71,87,0.2)';
+  configStatus.style.color = type === 'success' ? '#00D8A7' : 
+                            type === 'warning' ? '#ffa502' : '#ff4757';
+  configStatus.style.border = `1px solid ${type === 'success' ? 'rgba(0,216,167,0.3)' : 
+                                type === 'warning' ? 'rgba(255,165,2,0.3)' : 'rgba(255,71,87,0.3)'}`;
+  configStatus.textContent = message;
+  
+  setTimeout(() => {
+    configStatus.style.display = 'none';
+  }, 5000);
+}
+
+// Sync-Benachrichtigung anzeigen
+function showSyncNotification(message) {
+  const existing = document.querySelector('.sync-notification');
+  if (existing) existing.remove();
+  
+  const notification = document.createElement('div');
+  notification.className = 'sync-notification';
+  notification.innerHTML = `
+    <i class="fas fa-cloud-upload-alt"></i>
+    <span>${message}</span>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.remove();
+    }
+  }, 3000);
+}
+
+// Lokale Daten speichern/laden
+function saveLocalData() {
+  localStorage.setItem("winChallenge", JSON.stringify(gamesData));
+}
+
+function loadLocalData() {
+  const saved = localStorage.getItem("winChallenge");
+  gamesData = saved ? JSON.parse(saved) : [];
+}
+
+// Tastatur-Shortcuts einrichten
+function setupKeyboardShortcuts() {
+  document.addEventListener('keydown', (e) => {
+    // Enter im Name-Feld fügt Game hinzu
+    if (e.target.id === 'gameName' && e.key === 'Enter') {
+      addGame();
+    }
+    
+    // Strg+S speichert/synchronisiert
+    if (e.ctrlKey && e.key === 's') {
+      e.preventDefault();
+      if (supabase) {
+        uploadToCloud();
+        showSyncNotification('💾 Manuell synchronisiert');
+      }
+    }
+  });
+}
+
+// ==================== START ====================
+document.addEventListener('DOMContentLoaded', init);
 </script>
-
 </body>
 </html>
-
