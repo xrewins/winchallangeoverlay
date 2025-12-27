@@ -7,13 +7,12 @@
 </head>
 <body>
 
-<div id="overlay">
+<div id="wrapper">
   <div id="games"></div>
 
   <div id="total">
-    <div id="totalText"></div>
-    <div id="totalTrack">
-      <div id="totalFill"></div>
+    <div id="total-bar">
+      <div id="total-fill"></div>
     </div>
   </div>
 </div>
@@ -21,12 +20,11 @@
 <script>
 function render() {
   const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
-  const gamesEl = document.getElementById("games");
+  const games = document.getElementById("games");
+  games.innerHTML = "";
 
   let totalCurrent = 0;
   let totalNeeded = 0;
-
-  gamesEl.innerHTML = "";
 
   data.forEach(g => {
     totalCurrent += g.current;
@@ -34,25 +32,24 @@ function render() {
 
     const done = g.current >= g.needed;
 
-    gamesEl.innerHTML += `
-      <div class="row ${done ? 'done' : ''}">
-        <span class="name">${g.name}</span>
-        <span class="count">${g.current} / ${g.needed}</span>
-      </div>
+    const row = document.createElement("div");
+    row.className = "row" + (done ? " done" : "");
+    row.innerHTML = `
+      <span class="game-name">${g.name}</span>
+      <span class="game-count">${g.current}/${g.needed}</span>
     `;
+    games.appendChild(row);
   });
 
-  const percent = totalNeeded
+  const percent = totalNeeded > 0
     ? Math.min(100, (totalCurrent / totalNeeded) * 100)
     : 0;
 
-  document.getElementById("totalText").innerText =
-    `GESAMT: ${totalCurrent} / ${totalNeeded}`;
-
-  document.getElementById("totalFill").style.width = percent + "%";
+  document.getElementById("total-fill").style.width = percent + "%";
 }
 
 setInterval(render, 300);
 </script>
+
 </body>
 </html>
