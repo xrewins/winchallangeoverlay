@@ -133,3 +133,57 @@ button {
   gap: 6px;
 }
 
+/* ===== OVERLAY WRAPPER ===== */
+
+#wrapper {
+  width: 520px;
+  padding: 24px 28px;
+  background: rgba(20,20,20,0.65);
+  backdrop-filter: blur(16px);
+  border-radius: 22px;
+  color: white;
+  font-family: Inter, Arial, sans-serif;
+}
+
+/* ===== GAME LIST ===== */
+
+#games {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 22px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.row.done {
+  color: #00ff9c;
+  opacity: 0.6;
+}
+
+/* ===== TOTAL PROGRESS ===== */
+
+#total {
+  margin-top: 18px;
+}
+
+#total-bar {
+  height: 6px;
+  width: 100%;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+#total-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#00ff9c,#00ffd0);
+  box-shadow: 0 0 12px rgba(0,255,160,0.8);
+  transition: width 0.4s ease;
+}
