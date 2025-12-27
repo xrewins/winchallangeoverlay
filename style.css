@@ -1,55 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
 body {
   margin: 0;
-  font-family: Inter, Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   background: transparent;
   color: white;
 }
 
-#games {
+/* ---------- OVERLAY ---------- */
+
+#overlay {
   display: flex;
   gap: 20px;
 }
 
 .game-card {
-  background: rgba(0,0,0,0.7);
-  padding: 20px;
-  border-radius: 16px;
-  width: 260px;
+  width: 280px;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(20,20,20,0.75);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0,255,150,0.1);
   transition: 0.4s;
 }
 
 .game-card.done {
-  background: rgba(0,120,0,0.6);
-  box-shadow: 0 0 25px #00ff88;
+  background: rgba(0,150,90,0.55);
+  box-shadow: 0 0 35px rgba(0,255,160,0.9);
   opacity: 0.85;
 }
 
+.header {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
 .progress {
-  background: #333;
   height: 12px;
-  border-radius: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
   overflow: hidden;
-  margin: 10px 0;
 }
 
 .bar {
   height: 100%;
-  background: linear-gradient(90deg,#00ff88,#00ffaa);
+  background: linear-gradient(90deg,#00ff9c,#00ffd0);
+  transition: width 0.4s;
 }
 
+.counter {
+  margin-top: 10px;
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+/* ---------- CONTROL ---------- */
+
 .control {
-  background: #0f0f0f;
-  padding: 20px;
+  background: #0b0b0b;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.panel {
+  width: 420px;
+  background: #141414;
+  padding: 30px;
+  border-radius: 20px;
+}
+
+.panel h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
+  background: #1f1f1f;
+  color: white;
+}
+
+button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #00ff9c;
+  font-weight: 600;
 }
 
 .control-card {
-  background: #222;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 10px;
+  background: #1d1d1d;
+  padding: 12px;
+  border-radius: 12px;
+  margin-top: 10px;
 }
 
-input, button {
-  margin: 5px;
-  padding: 8px;
+.control-card.done {
+  background: rgba(0,150,90,0.4);
+}
+
+.title {
+  font-weight: 700;
+}
+
+.buttons {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
 }
