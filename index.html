@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* Zusätzliche Live-Update Animationen */
+/* Zusätzliche Styles für Live-Updates */
 @keyframes highlight-update {
   0% { background-color: rgba(0, 216, 167, 0.1); }
   100% { background-color: transparent; }
@@ -20,14 +20,36 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 12px;
+  font-size: 11px;
   color: #00D8A7;
   opacity: 0;
   transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .refresh-indicator.visible {
   opacity: 1;
+}
+
+/* Connection Status im Header */
+.live-badge.connected {
+  color: #00D8A7;
+}
+
+.live-badge.disconnected {
+  color: #ff4757;
+}
+
+/* Loading Animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.fa-spin {
+  animation: spin 1s linear infinite;
 }
 </style>
 </head>
@@ -39,7 +61,7 @@
       <div class="pulse-dot"></div>
       <span class="overlay-title">WIN CHALLENGE</span>
       <div class="live-badge" id="status-indicator">
-        <i class="fas fa-circle"></i> LIVE
+        <i class="fas fa-cloud"></i> LIVE
       </div>
     </div>
     <div class="total-stats">
@@ -49,7 +71,7 @@
   </div>
 
   <div id="games" class="games-list">
-    <!-- Games werden hier eingefügt -->
+    <!-- Games werden hier dynamisch eingefügt -->
   </div>
 
   <div class="global-progress">
@@ -57,7 +79,7 @@
       <span>Fortschritt</span>
       <span class="progress-percent" id="total-percent">0%</span>
       <span class="refresh-indicator" id="refresh-indicator">
-        <i class="fas fa-sync-alt"></i> Aktualisiert
+        <i class="fas fa-sync-alt fa-spin"></i> Live
       </span>
     </div>
     <div class="progress-track">
@@ -66,46 +88,177 @@
   </div>
 </div>
 
+<!-- Supabase JS Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-// Daten aus URL laden
-function loadDataFromURL() {
+// ==================== SUPABASE KONFIGURATION ====================
+// DEINE SUPABASE DATEN - DIESE MÜSSEN MIT CONTROL.HTM ÜBEREINSTIMMEN!
+const SUPABASE_URL = 'https://ghzodgqipchpgwljdumn.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WdoRvQS8nS2RTOFGvVcY8w_EukbvYTq';
+
+// ==================== GLOBALE VARIABLEN ====================
+let supabase = null;
+let gamesData = [];
+let realtimeChannel = null;
+let currentUser = null;
+let lastUpdateTime = Date.now();
+
+// ==================== INITIALISIERUNG ====================
+async function init() {
+  console.log('Win Challenge Overlay initializing...');
+  
+  // User ID aus URL Parameter lesen
   const urlParams = new URLSearchParams(window.location.search);
-  const dataParam = urlParams.get('data');
+  currentUser = urlParams.get('user') || 'demo_user';
   
-  if (!dataParam) {
-    console.log("Keine Daten in der URL gefunden");
-    return [];
-  }
+  console.log('User ID:', currentUser);
+  console.log('Supabase URL:', SUPABASE_URL);
   
+  // Mit Supabase verbinden
+  await connectToSupabase();
+  
+  // Initiale Daten laden
+  await loadFromCloud();
+  
+  // Erstes Rendering
+  render();
+  
+  // Echtzeit-Updates einrichten
+  setupRealtimeSubscription();
+  
+  // Status-Update alle 30 Sekunden
+  setInterval(updateConnectionStatus, 30000);
+  
+  console.log('Overlay erfolgreich initialisiert');
+}
+
+// ==================== SUPABASE FUNKTIONEN ====================
+
+// Verbindung zu Supabase herstellen
+async function connectToSupabase() {
   try {
-    const decodedData = decodeURIComponent(dataParam);
-    const games = JSON.parse(decodedData);
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    if (!Array.isArray(games)) {
-      throw new Error("Daten sind kein Array");
+    // Verbindung testen
+    const { error } = await supabase
+      .from('win_challenge')
+      .select('count')
+      .limit(1);
+    
+    if (error) {
+      console.error('Supabase Verbindungsfehler:', error);
+      updateConnectionStatus(false);
+      return false;
     }
     
-    return games;
+    updateConnectionStatus(true);
+    return true;
+    
   } catch (error) {
-    console.error("Fehler beim Laden der Daten:", error);
-    return [];
+    console.error('Fehler beim Verbinden mit Supabase:', error);
+    updateConnectionStatus(false);
+    return false;
   }
 }
 
-// Overlay rendern mit Highlight-Effekt bei Updates
+// Echtzeit-Updates einrichten
+function setupRealtimeSubscription() {
+  if (!supabase || realtimeChannel) return;
+  
+  realtimeChannel = supabase
+    .channel('overlay-updates')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'win_challenge',
+        filter: `user_id=eq.${currentUser}`
+      },
+      (payload) => {
+        console.log('Echtzeit-Update empfangen:', payload);
+        
+        if (payload.new && payload.new.data) {
+          const newData = payload.new.data;
+          
+          // Nur aktualisieren wenn Daten sich geändert haben
+          if (JSON.stringify(gamesData) !== JSON.stringify(newData)) {
+            gamesData = newData;
+            render(true); // Mit Highlight-Effekt
+            showUpdateIndicator();
+            lastUpdateTime = Date.now();
+            
+            console.log('Overlay aktualisiert mit', gamesData.length, 'Games');
+          }
+        }
+      }
+    )
+    .subscribe((status) => {
+      console.log('Echtzeit-Abonnement Status:', status);
+      
+      if (status === 'SUBSCRIBED') {
+        updateConnectionStatus(true);
+      } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+        updateConnectionStatus(false);
+        
+        // Neu verbinden nach 5 Sekunden
+        setTimeout(() => {
+          if (realtimeChannel) {
+            realtimeChannel.unsubscribe();
+            realtimeChannel = null;
+          }
+          setupRealtimeSubscription();
+        }, 5000);
+      }
+    });
+}
+
+// Daten von Cloud laden
+async function loadFromCloud() {
+  if (!supabase) return;
+  
+  try {
+    const { data, error } = await supabase
+      .from('win_challenge')
+      .select('data')
+      .eq('user_id', currentUser)
+      .single();
+    
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // Keine Daten gefunden
+        console.log('Keine Daten für User gefunden:', currentUser);
+        gamesData = [];
+      } else {
+        throw error;
+      }
+    } else if (data && data.data) {
+      gamesData = data.data;
+      console.log('Daten von Cloud geladen:', gamesData.length, 'Games');
+    }
+    
+  } catch (error) {
+    console.error('Fehler beim Laden von Cloud:', error);
+    gamesData = [];
+  }
+}
+
+// ==================== RENDERING FUNKTIONEN ====================
+
+// Overlay rendern
 function render(highlightUpdates = false) {
-  const gamesData = loadDataFromURL();
   const gamesDiv = document.getElementById("games");
   
-  if (gamesData.length === 0) {
+  if (!gamesData || gamesData.length === 0) {
     gamesDiv.innerHTML = `
       <div class="game-row">
         <div class="game-content">
           <div class="game-status">
             <div class="status-icon">
-              <i class="fas fa-cloud-download-alt"></i>
+              <i class="fas fa-cloud-download-alt fa-spin"></i>
             </div>
-            <span class="game-name">Warte auf Daten...</span>
+            <span class="game-name">Warte auf Daten vom Control...</span>
           </div>
           <div class="game-progress">
             <div class="mini-bar-container">
@@ -117,9 +270,7 @@ function render(highlightUpdates = false) {
       </div>
     `;
     
-    document.getElementById("total-value").textContent = "0/0";
-    document.getElementById("total-percent").textContent = "0%";
-    document.getElementById("total-fill").style.width = "0%";
+    updateDisplay(0, 0, 0, 0);
     return;
   }
   
@@ -157,84 +308,94 @@ function render(highlightUpdates = false) {
   });
   
   gamesDiv.innerHTML = html;
+  updateDisplay(completedGames, gamesData.length, totalCurrent, totalNeeded);
+}
+
+// Display Werte aktualisieren
+function updateDisplay(completed, total, current = 0, needed = 0) {
+  const totalPercent = needed > 0 ? Math.min(100, (current / needed) * 100) : 0;
   
-  const totalPercent = totalNeeded > 0 ? Math.min(100, (totalCurrent / totalNeeded) * 100) : 0;
-  
-  document.getElementById("total-value").textContent = `${completedGames}/${gamesData.length}`;
+  document.getElementById("total-value").textContent = `${completed}/${total}`;
   document.getElementById("total-percent").textContent = `${Math.round(totalPercent)}%`;
   document.getElementById("total-fill").style.width = `${totalPercent}%`;
+}
+
+// Update-Indicator anzeigen
+function showUpdateIndicator() {
+  const indicator = document.getElementById('refresh-indicator');
+  indicator.classList.add('visible');
   
-  // Update-Indicator anzeigen
-  if (highlightUpdates) {
-    const indicator = document.getElementById('refresh-indicator');
-    indicator.classList.add('visible');
-    setTimeout(() => indicator.classList.remove('visible'), 1500);
+  setTimeout(() => {
+    indicator.classList.remove('visible');
+  }, 2000);
+}
+
+// Verbindungsstatus aktualisieren
+function updateConnectionStatus(isConnected) {
+  const indicator = document.getElementById('status-indicator');
+  const now = Date.now();
+  const timeSinceUpdate = Math.floor((now - lastUpdateTime) / 1000);
+  
+  if (isConnected) {
+    indicator.innerHTML = `<i class="fas fa-cloud"></i> LIVE`;
+    indicator.className = 'live-badge connected';
+    
+    // Zeige Zeit seit letztem Update
+    if (timeSinceUpdate < 60) {
+      indicator.title = `Vor ${timeSinceUpdate} Sekunden aktualisiert`;
+    } else {
+      indicator.title = `Vor ${Math.floor(timeSinceUpdate / 60)} Minuten aktualisiert`;
+    }
+  } else {
+    indicator.innerHTML = `<i class="fas fa-cloud-slash"></i> OFFLINE`;
+    indicator.className = 'live-badge disconnected';
+    indicator.title = 'Keine Verbindung zur Cloud';
   }
 }
 
-// Polling für Live-Updates
-let lastDataHash = '';
-let updateInterval = 5000; // Anfangs alle 5 Sekunden
-let errorCount = 0;
-
-function checkForUpdates() {
-  const currentHash = window.location.search;
+// Automatische Wiederherstellung bei Verbindungsverlust
+function autoReconnect() {
+  if (!supabase) return;
   
-  if (currentHash !== lastDataHash) {
-    console.log("Neue Daten erkannt, aktualisiere...");
-    lastDataHash = currentHash;
-    render(true); // Mit Highlight-Effekt
-    
-    // Bei Erfolg: Intervall verkürzen für schnellere Updates
-    if (updateInterval > 1000) {
-      updateInterval = 1000; // Auf 1 Sekunde setzen
-      clearInterval(updateTimer);
-      startPolling();
+  const channels = supabase.getChannels();
+  let needsReconnect = false;
+  
+  channels.forEach(channel => {
+    if (channel.state !== 'SUBSCRIBED') {
+      needsReconnect = true;
     }
-    
-    errorCount = 0;
-    return true;
-  }
-  
-  return false;
-}
-
-function startPolling() {
-  updateTimer = setInterval(() => {
-    if (!checkForUpdates()) {
-      // Bei fehlenden Updates: Intervall langsam erhöhen
-      errorCount++;
-      if (errorCount > 10 && updateInterval < 5000) {
-        updateInterval = Math.min(updateInterval * 1.5, 5000);
-        clearInterval(updateTimer);
-        startPolling();
-        console.log(`Update-Intervall angepasst: ${updateInterval}ms`);
-      }
-    }
-  }, updateInterval);
-}
-
-// Initiale Ausführung
-function init() {
-  console.log("Win Challenge Overlay gestartet");
-  console.log("URL Parameter:", window.location.search);
-  
-  // Erste Renderung
-  render();
-  lastDataHash = window.location.search;
-  
-  // Polling starten
-  startPolling();
-  
-  // Auch auf Hash-Änderungen reagieren (falls URL sich ändert)
-  window.addEventListener('hashchange', () => {
-    console.log("Hash geändert, aktualisiere...");
-    render(true);
   });
+  
+  if (needsReconnect) {
+    console.log('Versuche Verbindung wiederherzustellen...');
+    
+    if (realtimeChannel) {
+      realtimeChannel.unsubscribe();
+      realtimeChannel = null;
+    }
+    
+    setTimeout(() => {
+      setupRealtimeSubscription();
+    }, 2000);
+  }
 }
 
-// Starte die Anwendung
+// ==================== START ====================
+// Initialisierung starten
 init();
+
+// Alle 60 Sekunden auf Verbindungsprobleme prüfen
+setInterval(autoReconnect, 60000);
+
+// Falls Seite unsichtbar war und wieder sichtbar wird, aktualisieren
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    console.log('Seite wieder sichtbar - aktualisiere Daten');
+    if (supabase) {
+      loadFromCloud().then(() => render());
+    }
+  }
+});
 </script>
 
 </body>
