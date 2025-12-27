@@ -6,32 +6,32 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div id="games"></div>
+
+<div id="overlay"></div>
 
 <script>
 function render() {
   const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
-  const container = document.getElementById("games");
-  container.innerHTML = "";
+  const root = document.getElementById("overlay");
+  root.innerHTML = "";
 
-  data.forEach(game => {
-    const done = game.current >= game.needed;
-    const percent = Math.min(100, (game.current / game.needed) * 100);
+  data.forEach(g => {
+    const done = g.current >= g.needed;
+    const percent = Math.min(100, (g.current / g.needed) * 100);
 
-    const el = document.createElement("div");
-    el.className = "game-card" + (done ? " done" : "");
-    el.innerHTML = `
-      <h2>${game.name}</h2>
-      <div class="progress">
-        <div class="bar" style="width:${percent}%"></div>
+    root.innerHTML += `
+      <div class="game-card ${done ? 'done' : ''}">
+        <div class="header">${g.name}</div>
+        <div class="progress">
+          <div class="bar" style="width:${percent}%"></div>
+        </div>
+        <div class="counter">${g.current} / ${g.needed} WINS</div>
       </div>
-      <p>${game.current} / ${game.needed} Wins</p>
     `;
-    container.appendChild(el);
   });
 }
 
-setInterval(render, 500);
+setInterval(render, 300);
 </script>
 </body>
 </html>
