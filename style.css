@@ -7,52 +7,68 @@ body {
   color: white;
 }
 
-/* ---------- OVERLAY ---------- */
+/* ---------- MINIMAL HUD OVERLAY ---------- */
 
 #overlay {
+  min-width: 420px;
+  padding: 6px 0;
+  font-family: Inter, system-ui, sans-serif;
+  color: white;
+}
+
+#games {
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.game-card {
-  width: 280px;
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(20,20,20,0.75);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(0,255,150,0.1);
-  transition: 0.4s;
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
 }
 
-.game-card.done {
-  background: rgba(0,150,90,0.55);
-  box-shadow: 0 0 35px rgba(0,255,160,0.9);
-  opacity: 0.85;
+.row .name {
+  opacity: 0.9;
 }
 
-.header {
-  font-size: 22px;
-  font-weight: 800;
-  margin-bottom: 12px;
+.row .count {
+  opacity: 0.75;
 }
 
-.progress {
-  height: 12px;
-  background: rgba(255,255,255,0.15);
+/* DONE GAME */
+
+.row.done {
+  color: #00ff9c;
+  opacity: 0.65;
+}
+
+/* ---------- TOTAL BAR ---------- */
+
+#total {
+  margin-top: 14px;
+}
+
+#totalText {
+  font-size: 14px;
+  opacity: 0.6;
+  margin-bottom: 6px;
+}
+
+#totalTrack {
+  height: 4px;
+  background: rgba(255,255,255,0.2);
   border-radius: 10px;
   overflow: hidden;
 }
 
-.bar {
+#totalFill {
   height: 100%;
+  width: 0;
   background: linear-gradient(90deg,#00ff9c,#00ffd0);
-  transition: width 0.4s;
-}
-
-.counter {
-  margin-top: 10px;
-  font-size: 16px;
-  opacity: 0.85;
+  transition: width 0.4s ease;
 }
 
 /* ---------- CONTROL ---------- */
@@ -116,3 +132,4 @@ button {
   display: flex;
   gap: 6px;
 }
+
