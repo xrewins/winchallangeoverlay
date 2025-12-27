@@ -22,14 +22,14 @@
   </div>
 
   <div id="games" class="games-list">
-    <!-- Fallback, wenn keine Daten geladen werden -->
-    <div class="game-row">
+    <!-- Loading state -->
+    <div class="game-row loading">
       <div class="game-content">
         <div class="game-status">
           <div class="status-icon">
-            <div class="in-progress"></div>
+            <i class="fas fa-circle-notch fa-spin"></i>
           </div>
-          <span class="game-name">Lade Daten...</span>
+          <span class="game-name">Warte auf Daten...</span>
         </div>
         <div class="game-progress">
           <div class="mini-bar-container">
@@ -53,50 +53,64 @@
 </div>
 
 <script>
-// Simulierte Daten für den Fall, dass localStorage leer ist
-const fallbackData = [
-  { name: "Fortnite", current: 3, needed: 10 },
-  { name: "Valorant", current: 7, needed: 10 },
-  { name: "Apex", current: 5, needed: 10 }
-];
+// Funktion zum Lesen von URL-Parametern
+function getUrlParameter(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
 
+// Simulierte Daten NUR FALLS KEINE URL-DATEN vorhanden sind
+const demoData = [];
+
+let currentData = demoData;
 let lastUpdateTime = 0;
 const UPDATE_INTERVAL = 1000;
 
-function render() {
-  // Versuche Daten aus localStorage zu laden
-  let data;
-  try {
-    const storedData = localStorage.getItem("winChallenge");
-    data = storedData ? JSON.parse(storedData) : fallbackData;
-    
-    // Debug-Ausgabe in der Konsole (nur sichtbar im Browser, nicht in OBS)
-    console.log("Geladene Daten:", data);
-    console.log("Anzahl Games:", data.length);
-    
-  } catch (error) {
-    console.error("Fehler beim Laden der Daten:", error);
-    data = fallbackData;
+// Daten aus URL-Parameter laden
+function loadDataFromURL() {
+  const encodedData = getUrlParameter('data');
+  
+  if (encodedData) {
+    try {
+      const decodedData = JSON.parse(atob(encodedData));
+      currentData = decodedData;
+      console.log("Daten aus URL geladen:", currentData.length, "Games");
+      return true;
+    } catch (error) {
+      console.error("Fehler beim Decodieren der URL-Daten:", error);
+      currentData = demoData;
+      return false;
+    }
   }
+  
+  // Keine URL-Daten -> zeige Demo oder leeren State
+  currentData = demoData;
+  return false;
+}
 
+function render() {
   const games = document.getElementById("games");
+  
+  // Versuche Daten zu laden
+  const hasData = loadDataFromURL();
+  
   games.innerHTML = "";
 
   let totalCurrent = 0;
   let totalNeeded = 0;
   let completedGames = 0;
 
-  // Wenn keine Daten vorhanden sind, zeige Fallback
-  if (!data || data.length === 0) {
+  if (!hasData || currentData.length === 0) {
+    // Keine Daten verfügbar
     const row = document.createElement("div");
     row.className = "game-row";
     row.innerHTML = `
       <div class="game-content">
         <div class="game-status">
           <div class="status-icon">
-            <div class="in-progress"></div>
+            <i class="fas fa-exclamation-circle"></i>
           </div>
-          <span class="game-name">Keine Games konfiguriert</span>
+          <span class="game-name">Bitte im Control aktualisieren</span>
         </div>
         <div class="game-progress">
           <div class="mini-bar-container">
@@ -109,7 +123,7 @@ function render() {
     games.appendChild(row);
   } else {
     // Normale Darstellung
-    data.forEach(g => {
+    currentData.forEach(g => {
       totalCurrent += g.current;
       totalNeeded += g.needed;
       
@@ -146,7 +160,7 @@ function render() {
     ? Math.min(100, (totalCurrent / totalNeeded) * 100)
     : 0;
 
-  document.getElementById("total-value").textContent = completedGames + "/" + (data ? data.length : 0);
+  document.getElementById("total-value").textContent = completedGames + "/" + currentData.length;
   document.getElementById("total-fill").style.width = totalPercent + "%";
   document.getElementById("total-percent").textContent = Math.round(totalPercent) + "%";
   
@@ -163,16 +177,8 @@ function render() {
 // Direkt rendern beim Laden
 render();
 
-// Automatisches Update alle 300ms
-setInterval(render, 300);
-
-// Zusätzlich: Event-Listener für Storage-Änderungen (falls beide im gleichen Browser laufen)
-window.addEventListener('storage', function(e) {
-  if (e.key === 'winChallenge') {
-    console.log("Storage wurde aktualisiert:", e.newValue);
-    render();
-  }
-});
+// Automatisches Update alle 3 Sekunden (für GitHub reicht das)
+setInterval(render, 3000);
 </script>
 
 </body>
