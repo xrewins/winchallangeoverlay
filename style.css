@@ -11,17 +11,17 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Container */
+/* Container - JETZT SCHMALER */
 .overlay-container {
-  width: 400px;
-  padding: 20px;
-  background: rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(15px) saturate(160%);
-  border-radius: 16px;
+  width: 340px; /* Vorher 400px */
+  padding: 16px; /* Vorher 20px */
+  background: rgba(10, 10, 10, 0.9); /* Etwas dunkler für bessere Lesbarkeit */
+  backdrop-filter: blur(12px) saturate(160%);
+  border-radius: 14px; /* Vorher 16px */
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.2),
+    0 6px 24px rgba(0, 0, 0, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
@@ -30,29 +30,29 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 16px;
+  margin-bottom: 16px; /* Vorher 20px */
+  padding-bottom: 12px; /* Vorher 16px */
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .title-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Vorher 10px */
 }
 
 .pulse-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px; /* Vorher 8px */
+  height: 6px;
   background: #00D8A7;
   border-radius: 50%;
   animation: pulse 2s infinite;
 }
 
 .overlay-title {
-  font-size: 16px;
+  font-size: 14px; /* Vorher 16px */
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px; /* Vorher 0.5px */
   color: rgba(255, 255, 255, 0.95);
   text-transform: uppercase;
 }
@@ -60,11 +60,11 @@ body {
 .live-badge {
   background: rgba(0, 216, 167, 0.15);
   color: #00D8A7;
-  font-size: 10px;
+  font-size: 9px; /* Vorher 10px */
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 10px;
-  letter-spacing: 0.5px;
+  padding: 2px 6px; /* Vorher 3px 8px */
+  border-radius: 8px; /* Vorher 10px */
+  letter-spacing: 0.4px;
   border: 1px solid rgba(0, 216, 167, 0.3);
 }
 
@@ -74,34 +74,34 @@ body {
 
 .total-text {
   display: block;
-  font-size: 10px;
+  font-size: 9px; /* Vorher 10px */
   color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 2px;
+  letter-spacing: 0.4px; /* Vorher 0.5px */
+  margin-bottom: 1px; /* Vorher 2px */
 }
 
 .total-value {
-  font-size: 18px;
+  font-size: 16px; /* Vorher 18px */
   font-weight: 700;
   color: #00D8A7;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px; /* Vorher 0.5px */
 }
 
-/* Games List */
+/* Games List - KOMPAKTER */
 .games-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 10px; /* Vorher 12px */
+  margin-bottom: 16px; /* Vorher 20px */
 }
 
 .game-row {
-  padding: 12px 14px;
+  padding: 10px 12px; /* Vorher 12px 14px */
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
+  border-radius: 10px; /* Vorher 12px */
   border: 1px solid rgba(255, 255, 255, 0.03);
-  transition: all 0.25s ease;
+  transition: all 0.2s ease; /* Vorher 0.25s */
 }
 
 .game-row:hover {
@@ -123,26 +123,28 @@ body {
 .game-status {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Vorher 10px */
   flex: 1;
+  min-width: 0; /* Verhindert Überlauf */
 }
 
 .status-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px; /* Vorher 20px */
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .status-icon i {
   color: #00D8A7;
-  font-size: 12px;
+  font-size: 10px; /* Vorher 12px */
 }
 
 .in-progress {
-  width: 10px;
-  height: 10px;
+  width: 8px; /* Vorher 10px */
+  height: 8px;
   background: rgba(255, 255, 255, 0.4);
   border-radius: 50%;
 }
@@ -152,9 +154,12 @@ body {
 }
 
 .game-name {
-  font-size: 14px;
+  font-size: 13px; /* Vorher 14px */
   font-weight: 500;
   color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .game-row.completed .game-name {
@@ -162,39 +167,40 @@ body {
   font-weight: 600;
 }
 
-/* Game Progress */
+/* Game Progress - KOMPAKTER */
 .game-progress {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 140px;
+  gap: 10px; /* Vorher 12px */
+  width: 110px; /* Vorher 140px */
+  flex-shrink: 0;
 }
 
 .mini-bar-container {
-  height: 4px;
+  height: 3px; /* Vorher 4px */
   flex-grow: 1;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 2px;
+  border-radius: 1.5px; /* Vorher 2px */
   overflow: hidden;
 }
 
 .mini-bar {
   height: 100%;
   background: rgba(255, 255, 255, 0.4);
-  border-radius: 2px;
-  transition: width 0.4s ease;
+  border-radius: 1.5px;
+  transition: width 0.3s ease; /* Vorher 0.4s */
 }
 
 .game-row.completed .mini-bar {
   background: #00D8A7;
-  box-shadow: 0 0 6px rgba(0, 216, 167, 0.4);
+  box-shadow: 0 0 4px rgba(0, 216, 167, 0.4); /* Vorher 6px */
 }
 
 .game-count {
-  font-size: 13px;
+  font-size: 12px; /* Vorher 13px */
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
-  min-width: 45px;
+  min-width: 40px; /* Vorher 45px */
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -210,19 +216,19 @@ body {
 
 /* Global Progress */
 .global-progress {
-  margin-top: 18px;
-  padding-top: 18px;
+  margin-top: 14px; /* Vorher 18px */
+  padding-top: 14px; /* Vorher 18px */
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .progress-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 12px;
+  margin-bottom: 6px; /* Vorher 8px */
+  font-size: 11px; /* Vorher 12px */
   color: rgba(255, 255, 255, 0.6);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px; /* Vorher 0.5px */
 }
 
 .progress-percent {
@@ -232,10 +238,10 @@ body {
 }
 
 .progress-track {
-  height: 6px;
+  height: 5px; /* Vorher 6px */
   width: 100%;
   background: rgba(255, 255, 255, 0.08);
-  border-radius: 3px;
+  border-radius: 2.5px; /* Vorher 3px */
   overflow: hidden;
   position: relative;
 }
@@ -244,9 +250,9 @@ body {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, #00D8A7, #00FFC2);
-  border-radius: 3px;
-  box-shadow: 0 0 10px rgba(0, 216, 167, 0.3);
-  transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: 2.5px;
+  box-shadow: 0 0 8px rgba(0, 216, 167, 0.3); /* Vorher 10px */
+  transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* Vorher 0.5s */
   position: relative;
 }
 
@@ -278,16 +284,4 @@ body {
 
 .pulse {
   animation: pulse 1s ease;
-}
-
-/* Responsive */
-@media (max-width: 450px) {
-  .overlay-container {
-    width: 340px;
-    padding: 16px;
-  }
-  
-  .game-progress {
-    width: 120px;
-  }
 }
