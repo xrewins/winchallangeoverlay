@@ -35,6 +35,9 @@
 </div>
 
 <script>
+let lastUpdateTime = 0;
+const UPDATE_INTERVAL = 1000; // Nur alle 1 Sekunde Live-Badge animieren
+
 function render() {
   const data = JSON.parse(localStorage.getItem("winChallenge")) || [];
   const games = document.getElementById("games");
@@ -48,7 +51,6 @@ function render() {
     totalCurrent += g.current;
     totalNeeded += g.needed;
     
-    // Zähle abgeschlossene Games
     if (g.current >= g.needed && g.needed > 0) {
       completedGames++;
     }
@@ -77,20 +79,22 @@ function render() {
     games.appendChild(row);
   });
 
-  // Berechne Gesamtfortschritt
   const totalPercent = totalNeeded > 0
     ? Math.min(100, (totalCurrent / totalNeeded) * 100)
     : 0;
 
-  // Zeige "Abgeschlossen/Gesamt" an (z.B. "1/5")
   document.getElementById("total-value").textContent = completedGames + "/" + data.length;
   document.getElementById("total-fill").style.width = totalPercent + "%";
   document.getElementById("total-percent").textContent = Math.round(totalPercent) + "%";
   
-  // Live-Animation
-  const liveBadge = document.querySelector('.live-badge');
-  liveBadge.classList.add('pulse');
-  setTimeout(() => liveBadge.classList.remove('pulse'), 1000);
+  // Live-Badge nur alle 1 Sekunde animieren, nicht bei jedem Render (300ms)
+  const now = Date.now();
+  if (now - lastUpdateTime > UPDATE_INTERVAL) {
+    const liveBadge = document.querySelector('.live-badge');
+    liveBadge.classList.add('pulse');
+    setTimeout(() => liveBadge.classList.remove('pulse'), 1000);
+    lastUpdateTime = now;
+  }
 }
 
 setInterval(render, 300);
